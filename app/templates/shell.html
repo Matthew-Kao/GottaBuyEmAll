@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}GottaBuyEmAll{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/drip.css" />
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <span class="logo-mark">●</span>
+        GottaBuyEmAll
+      </a>
+
+      <div class="nav-search">
+        <input type="text" placeholder="Cari kartu, set, atau seller..." class="search-input" id="searchInput" />
+        <button class="search-btn" onclick="handleSearch()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="nav-actions">
+        {% if current_user %}
+          <a href="/listings/new" class="btn btn-primary btn-sm">+ Jual Kartu</a>
+          <div class="nav-user-menu">
+            <div class="user-avatar">{{ current_user.username[0].upper() }}</div>
+            <div class="user-dropdown">
+              <a href="/profile">Profil saya</a>
+              <a href="/orders">Pesanan</a>
+              <a href="/listings/mine">Listing saya</a>
+              <hr class="dropdown-divider"/>
+              <a href="/logout" class="danger-link">Keluar</a>
+            </div>
+          </div>
+        {% else %}
+          <a href="/login" class="btn btn-ghost btn-sm">Masuk</a>
+          <a href="/register" class="btn btn-primary btn-sm">Daftar</a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  {% if messages %}
+    <div class="flash-container">
+      {% for category, message in messages %}
+        <div class="flash flash-{{ category }}">
+          {{ message }}
+          <button class="flash-close" onclick="this.parentElement.remove()">×</button>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="/" class="nav-logo">
+          <span class="logo-mark">●</span>
+          GottaBuyEmAll
+        </a>
+        <p class="footer-tagline">Marketplace kartu Pokémon terpercaya di Indonesia</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <span class="footer-col-title">Marketplace</span>
+          <a href="/listings">Semua Listing</a>
+          <a href="/listings?rarity=rare">Rare Cards</a>
+          <a href="/listings?condition=mint">Mint Condition</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Akun</span>
+          <a href="/register">Daftar</a>
+          <a href="/login">Masuk</a>
+        </div>
+        <div class="footer-col">
+          <span class="footer-col-title">Info</span>
+          <a href="/how-it-works">Cara Kerja</a>
+          <a href="/faq">FAQ</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 GottaBuyEmAll. Dana pembeli diamankan hingga konfirmasi penerimaan.</span>
+    </div>
+  </footer>
+
+  <script src="/static/js/hustle.js"></script>
+  {% block extra_scripts %}{% endblock %}
+</body>
+</html>

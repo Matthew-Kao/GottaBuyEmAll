@@ -1,0 +1,192 @@
+{% extends "shell.html" %}
+
+{% block title %}GottaBuyEmAll — Beli & Jual Kartu Pokémon{% endblock %}
+
+{% block content %}
+
+  <section class="hero">
+    <div class="hero-inner">
+
+      <div class="hero-left">
+        <div class="hero-eyebrow">Marketplace #1 Indonesia</div>
+        <h1 class="hero-title">
+          Beli &amp; Jual<br/>
+          <em>Kartu Pokémon</em><br/>
+          dengan Aman
+        </h1>
+        <p class="hero-sub">
+          Dana kamu aman sampai kartu di tangan.
+          Sistem escrow kami melindungi setiap transaksi.
+        </p>
+        <div class="hero-cta">
+          <a href="/listings" class="btn btn-primary btn-lg">Lihat Semua Kartu</a>
+          <a href="/how-it-works" class="btn btn-ghost btn-lg">Cara Kerja →</a>
+        </div>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-num">{{ stats.total_listings }}</span>
+            <span class="stat-label">Kartu listing</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-num">{{ stats.active_sellers }}</span>
+            <span class="stat-label">Seller aktif</span>
+          </div>
+          <div class="stat-divider"></div>
+          <div class="stat-item">
+            <span class="stat-num">{{ stats.price_range }}</span>
+            <span class="stat-label">Range harga</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="card-stack">
+          <div class="stack-card stack-card--back">
+            <div class="fake-card-inner">
+              <div class="fake-card-shine"></div>
+              <div class="fake-card-name">Rayquaza VMAX</div>
+              <div class="fake-card-set">Secret Rare · Evolving Skies</div>
+              <div class="fake-card-price">Rp 2.8jt</div>
+            </div>
+          </div>
+          <div class="stack-card stack-card--mid">
+            <div class="fake-card-inner">
+              <div class="fake-card-shine"></div>
+              <div class="fake-card-name">Umbreon VMAX</div>
+              <div class="fake-card-set">Ultra Rare · Evolving Skies</div>
+              <div class="fake-card-price">Rp 3.2jt</div>
+            </div>
+          </div>
+          <div class="stack-card stack-card--front">
+            <div class="fake-card-inner">
+              <div class="fake-card-shine"></div>
+              <div class="fake-card-name">Charizard VMAX</div>
+              <div class="fake-card-set">Ultra Rare · Champions Path</div>
+              <div class="fake-card-price">Rp 1.5jt</div>
+            </div>
+          </div>
+          <div class="stack-escrow-badge">
+            <span class="escrow-dot"></span>
+            Dana escrow aktif
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section class="listings-section">
+    <div class="listings-inner">
+
+      <div class="listings-header">
+        <h2 class="section-title">Listing Terbaru</h2>
+        <div class="filter-bar">
+          <div class="filter-group">
+            <label class="filter-label">Kondisi</label>
+            <select class="filter-select" name="condition" onchange="applyFilter(this)">
+              <option value="">Semua</option>
+              <option value="mint">Mint</option>
+              <option value="near_mint">Near Mint</option>
+              <option value="played">Played</option>
+              <option value="damaged">Damaged</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label class="filter-label">Rarity</label>
+            <select class="filter-select" name="rarity" onchange="applyFilter(this)">
+              <option value="">Semua</option>
+              <option value="common">Common</option>
+              <option value="uncommon">Uncommon</option>
+              <option value="rare">Rare</option>
+              <option value="ultra_rare">Ultra Rare</option>
+              <option value="secret_rare">Secret Rare</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label class="filter-label">Urut</label>
+            <select class="filter-select" name="sort" onchange="applyFilter(this)">
+              <option value="newest">Terbaru</option>
+              <option value="price_asc">Harga terendah</option>
+              <option value="price_desc">Harga tertinggi</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {% if listings %}
+        <div class="card-grid">
+          {% for listing in listings %}
+            <a href="/listings/{{ listing.id }}" class="card-item">
+              <div class="card-img-wrap">
+                {% if listing.first_image %}
+                  <img src="{{ listing.first_image }}" alt="{{ listing.card.pokemon.name }}" class="card-img" loading="lazy" />
+                {% else %}
+                  <div class="card-img-placeholder">
+                    <span>No Image</span>
+                  </div>
+                {% endif %}
+                <span class="rarity-badge rarity-{{ listing.card.rarity }}">
+                  {{ listing.card.rarity.replace('_', ' ').title() }}
+                </span>
+                {% if listing.is_graded %}
+                  <span class="graded-badge">
+                    {{ listing.grading.grading_service }} {{ listing.grading.grade }}
+                  </span>
+                {% endif %}
+              </div>
+              <div class="card-info">
+                <div class="card-name">{{ listing.card.pokemon.name }}</div>
+                <div class="card-set">{{ listing.card.set_name }} · {{ listing.card.card_variant.replace('_', ' ').title() }}</div>
+                <div class="card-footer">
+                  <span class="card-price">Rp {{ "{:,.0f}".format(listing.price) }}</span>
+                  {% if listing.condition %}
+                    <span class="card-condition condition-{{ listing.condition }}">
+                      {{ listing.condition.replace('_', ' ').title() }}
+                    </span>
+                  {% endif %}
+                </div>
+                <div class="card-seller">
+                  <span class="seller-dot"></span>
+                  {{ listing.seller.username }}
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+
+      {% else %}
+        <div class="empty-state">
+          <div class="empty-icon">◈</div>
+          <p>Belum ada listing. <a href="/listings/new">Jadilah yang pertama jual!</a></p>
+        </div>
+      {% endif %}
+
+    </div>
+  </section>
+
+  <section class="trust-section">
+    <div class="trust-inner">
+      <h2 class="section-title centered">Kenapa GottaBuyEmAll?</h2>
+      <div class="trust-grid">
+        <div class="trust-card">
+          <div class="trust-icon">⬡</div>
+          <h3>Dana Escrow</h3>
+          <p>Pembayaran kamu ditahan aman sampai kartu tiba dan kamu konfirmasi. Seller baru dapat dana setelah itu.</p>
+        </div>
+        <div class="trust-card">
+          <div class="trust-icon">◈</div>
+          <h3>Seller Terverifikasi</h3>
+          <p>Setiap seller punya rating dan riwayat transaksi yang transparan. Kamu bisa lihat track record sebelum beli.</p>
+        </div>
+        <div class="trust-card">
+          <div class="trust-icon">○</div>
+          <h3>Dispute Protection</h3>
+          <p>Ada masalah? Tim kami siap bantu resolve. Jika kartu tidak sesuai, kamu bisa ajukan dispute untuk refund.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+{% endblock %}

@@ -43,30 +43,40 @@
 
       <div class="hero-right">
         <div class="card-stack">
-          <div class="stack-card stack-card--back">
-            <div class="fake-card-inner">
-              <div class="fake-card-shine"></div>
-              <div class="fake-card-name">Rayquaza VMAX</div>
-              <div class="fake-card-set">Secret Rare · Evolving Skies</div>
-              <div class="fake-card-price">Rp 2.8jt</div>
+
+          {% if hero_listings|length >= 3 %}
+            <div class="stack-card stack-card--back">
+              <img src="{{ hero_listings[2].first_image }}" alt="{{ hero_listings[2].card.pokemon.name }}" class="stack-img" />
+              <div class="stack-card-overlay">
+                <div class="fake-card-name">{{ hero_listings[2].card.pokemon.name }}</div>
+                <div class="fake-card-set">{{ hero_listings[2].card.rarity.replace('_', ' ').title() }} · {{ hero_listings[2].card.set_name }}</div>
+                <div class="fake-card-price">Rp {{ "{:,.0f}".format(hero_listings[2].price) }}</div>
+              </div>
             </div>
-          </div>
-          <div class="stack-card stack-card--mid">
-            <div class="fake-card-inner">
-              <div class="fake-card-shine"></div>
-              <div class="fake-card-name">Umbreon VMAX</div>
-              <div class="fake-card-set">Ultra Rare · Evolving Skies</div>
-              <div class="fake-card-price">Rp 3.2jt</div>
+          {% endif %}
+
+          {% if hero_listings|length >= 2 %}
+            <div class="stack-card stack-card--mid">
+              <img src="{{ hero_listings[1].first_image }}" alt="{{ hero_listings[1].card.pokemon.name }}" class="stack-img" />
+              <div class="stack-card-overlay">
+                <div class="fake-card-name">{{ hero_listings[1].card.pokemon.name }}</div>
+                <div class="fake-card-set">{{ hero_listings[1].card.rarity.replace('_', ' ').title() }} · {{ hero_listings[1].card.set_name }}</div>
+                <div class="fake-card-price">Rp {{ "{:,.0f}".format(hero_listings[1].price) }}</div>
+              </div>
             </div>
-          </div>
-          <div class="stack-card stack-card--front">
-            <div class="fake-card-inner">
-              <div class="fake-card-shine"></div>
-              <div class="fake-card-name">Charizard VMAX</div>
-              <div class="fake-card-set">Ultra Rare · Champions Path</div>
-              <div class="fake-card-price">Rp 1.5jt</div>
+          {% endif %}
+
+          {% if hero_listings|length >= 1 %}
+            <div class="stack-card stack-card--front">
+              <img src="{{ hero_listings[0].first_image }}" alt="{{ hero_listings[0].card.pokemon.name }}" class="stack-img" />
+              <div class="stack-card-overlay">
+                <div class="fake-card-name">{{ hero_listings[0].card.pokemon.name }}</div>
+                <div class="fake-card-set">{{ hero_listings[0].card.rarity.replace('_', ' ').title() }} · {{ hero_listings[0].card.set_name }}</div>
+                <div class="fake-card-price">Rp {{ "{:,.0f}".format(hero_listings[0].price) }}</div>
+              </div>
             </div>
-          </div>
+          {% endif %}
+
           <div class="stack-escrow-badge">
             <span class="escrow-dot"></span>
             Dana escrow aktif

@@ -1,16 +1,19 @@
-from fastapi import FastAPI, Request, Depends
+from fastapi import FastAPI, Request, Depends, Query, Form, UploadFile, File
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.orm import Session, joinedload
+from sqlalchemy import asc, desc
 from starlette.middleware.sessions import SessionMiddleware
 
 from app.database import get_db, engine, Base
 from app.models.listing import Listing
+from app.models.order import Order
 from app.models.user import User
 from app.models.card import Card
 from app.models.pokemon import Pokemon
 from app.core.dependencies import get_current_user
+from app.core.cloudinary import upload_image
 from app.routers import auth as auth_router
 from app.config import settings
 
@@ -35,8 +38,13 @@ async def homepage(
     request: Request,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
+    condition: str = Query(default=""),
+    rarity: str = Query(default=""),
+    sort: str = Query(default="newest"),
+    page: int = Query(default=1, ge=1),
 ):
-    listings = (
+    per_page = 20
+    query = (
         db.query(Listing)
         .options(
             joinedload(Listing.card).joinedload(Card.pokemon),
@@ -44,17 +52,41 @@ async def homepage(
             joinedload(Listing.grading),
         )
         .filter(Listing.status == "active")
-        .order_by(Listing.created_at.desc())
-        .limit(20)
+    )
+
+    if condition:
+        query = query.filter(Listing.condition == condition)
+
+    if rarity:
+        query = query.join(Listing.card).filter(Card.rarity == rarity)
+
+    if sort == "price_asc":
+        query = query.order_by(asc(Listing.price))
+    elif sort == "price_desc":
+        query = query.order_by(desc(Listing.price))
+    else:
+        query = query.order_by(desc(Listing.created_at))
+
+    total = query.count()
+    total_pages = max(1, (total + per_page - 1) // per_page)
+    listings = query.offset((page - 1) * per_page).limit(per_page).all()
+
+    hero_listings = (
+        db.query(Listing)
+        .options(
+            joinedload(Listing.card).joinedload(Card.pokemon),
+            joinedload(Listing.grading),
+        )
+        .filter(Listing.status == "active", Listing.image_urls.isnot(None))
+        .order_by(desc(Listing.created_at))
+        .limit(3)
         .all()
     )
 
-    hero_listings = [l for l in listings if l.first_image][:3]
-
-    total_listings = db.query(Listing).filter(Listing.status == "active").count()
+    all_active = db.query(Listing).filter(Listing.status == "active")
+    total_listings = all_active.count()
     active_sellers = db.query(User).filter(User.total_sales > 0).count()
-
-    prices = [float(l.price) for l in listings if l.price]
+    prices = [float(l.price) for l in all_active.limit(100).all() if l.price]
 
     def fmt_price(p):
         if p >= 1_000_000:
@@ -67,19 +99,82 @@ async def homepage(
         if prices else "–"
     )
 
-    stats = {
-        "total_listings": total_listings,
-        "active_sellers": active_sellers,
-        "price_range": price_range,
-    }
-
     return templates.TemplateResponse(request, "storefront.html", {
         "listings": listings,
         "hero_listings": hero_listings,
-        "stats": stats,
+        "stats": {
+            "total_listings": total_listings,
+            "active_sellers": active_sellers,
+            "price_range": price_range,
+        },
         "current_user": current_user,
         "messages": [],
-        "filters": {},
-        "page": 1,
-        "total_pages": 1,
+        "filters": {"condition": condition, "rarity": rarity, "sort": sort},
+        "page": page,
+        "total_pages": total_pages,
     })
+
+
+@app.get("/profile", response_class=HTMLResponse)
+async def profile(
+    request: Request,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    if not current_user:
+        return RedirectResponse("/auth/login", status_code=302)
+
+    listings = (
+        db.query(Listing)
+        .options(
+            joinedload(Listing.card).joinedload(Card.pokemon),
+            joinedload(Listing.grading),
+        )
+        .filter(Listing.seller_id == current_user.id)
+        .order_by(desc(Listing.created_at))
+        .all()
+    )
+
+    orders_as_buyer = (
+        db.query(Order)
+        .options(
+            joinedload(Order.listing).joinedload(Listing.card).joinedload(Card.pokemon),
+            joinedload(Order.listing).joinedload(Listing.seller),
+        )
+        .filter(Order.buyer_id == current_user.id)
+        .order_by(desc(Order.created_at))
+        .all()
+    )
+
+    return templates.TemplateResponse(request, "profile.html", {
+        "current_user": current_user,
+        "profile_user": current_user,
+        "listings": listings,
+        "orders_as_buyer": orders_as_buyer,
+    })
+
+
+@app.post("/profile/update")
+async def update_profile(
+    request: Request,
+    bio: str = Form(default=""),
+    favorite_pokemon: str = Form(default=""),
+    avatar: UploadFile = File(default=None),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    if not current_user:
+        return RedirectResponse("/auth/login", status_code=302)
+
+    current_user.bio = bio.strip() or None
+    current_user.favorite_pokemon = favorite_pokemon.strip() or None
+
+    if avatar and avatar.filename:
+        file_bytes = await avatar.read()
+        if file_bytes:
+            url = upload_image(file_bytes, folder="gottabuyemall/avatars")
+            if url:
+                current_user.avatar_url = url
+
+    db.commit()
+    return RedirectResponse("/profile", status_code=302)

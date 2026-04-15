@@ -93,35 +93,39 @@
       <div class="listings-header">
         <h2 class="section-title">Listing Terbaru</h2>
         <div class="filter-bar">
+
           <div class="filter-group">
             <label class="filter-label">Kondisi</label>
             <select class="filter-select" name="condition" onchange="applyFilter(this)">
               <option value="">Semua</option>
-              <option value="mint">Mint</option>
-              <option value="near_mint">Near Mint</option>
-              <option value="played">Played</option>
-              <option value="damaged">Damaged</option>
+              <option value="mint" {% if filters.condition == 'mint' %}selected{% endif %}>Mint</option>
+              <option value="near_mint" {% if filters.condition == 'near_mint' %}selected{% endif %}>Near Mint</option>
+              <option value="played" {% if filters.condition == 'played' %}selected{% endif %}>Played</option>
+              <option value="damaged" {% if filters.condition == 'damaged' %}selected{% endif %}>Damaged</option>
             </select>
           </div>
+
           <div class="filter-group">
             <label class="filter-label">Rarity</label>
             <select class="filter-select" name="rarity" onchange="applyFilter(this)">
               <option value="">Semua</option>
-              <option value="common">Common</option>
-              <option value="uncommon">Uncommon</option>
-              <option value="rare">Rare</option>
-              <option value="ultra_rare">Ultra Rare</option>
-              <option value="secret_rare">Secret Rare</option>
+              <option value="common" {% if filters.rarity == 'common' %}selected{% endif %}>Common</option>
+              <option value="uncommon" {% if filters.rarity == 'uncommon' %}selected{% endif %}>Uncommon</option>
+              <option value="rare" {% if filters.rarity == 'rare' %}selected{% endif %}>Rare</option>
+              <option value="ultra_rare" {% if filters.rarity == 'ultra_rare' %}selected{% endif %}>Ultra Rare</option>
+              <option value="secret_rare" {% if filters.rarity == 'secret_rare' %}selected{% endif %}>Secret Rare</option>
             </select>
           </div>
+
           <div class="filter-group">
             <label class="filter-label">Urut</label>
             <select class="filter-select" name="sort" onchange="applyFilter(this)">
-              <option value="newest">Terbaru</option>
-              <option value="price_asc">Harga terendah</option>
-              <option value="price_desc">Harga tertinggi</option>
+              <option value="newest" {% if filters.sort == 'newest' or not filters.sort %}selected{% endif %}>Terbaru</option>
+              <option value="price_asc" {% if filters.sort == 'price_asc' %}selected{% endif %}>Harga terendah</option>
+              <option value="price_desc" {% if filters.sort == 'price_desc' %}selected{% endif %}>Harga tertinggi</option>
             </select>
           </div>
+
         </div>
       </div>
 
@@ -166,10 +170,22 @@
           {% endfor %}
         </div>
 
+        {% if total_pages > 1 %}
+          <div class="pagination">
+            {% if page > 1 %}
+              <a href="?page={{ page - 1 }}&condition={{ filters.condition }}&rarity={{ filters.rarity }}&sort={{ filters.sort }}" class="page-btn">← Sebelumnya</a>
+            {% endif %}
+            <span class="page-info">{{ page }} / {{ total_pages }}</span>
+            {% if page < total_pages %}
+              <a href="?page={{ page + 1 }}&condition={{ filters.condition }}&rarity={{ filters.rarity }}&sort={{ filters.sort }}" class="page-btn">Selanjutnya →</a>
+            {% endif %}
+          </div>
+        {% endif %}
+
       {% else %}
         <div class="empty-state">
           <div class="empty-icon">◈</div>
-          <p>Belum ada listing. <a href="/listings/new">Jadilah yang pertama jual!</a></p>
+          <p>Tidak ada kartu yang cocok. <a href="/">Reset filter</a></p>
         </div>
       {% endif %}
 

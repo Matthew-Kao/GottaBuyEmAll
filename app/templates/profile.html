@@ -1,0 +1,203 @@
+{% extends "shell.html" %}
+
+{% block title %}Profil — {{ profile_user.username }}{% endblock %}
+
+{% block content %}
+<div class="profile-wrap">
+
+  <div class="profile-header">
+    <div class="profile-avatar-lg">
+      {% if profile_user.avatar_url %}
+        <img src="{{ profile_user.avatar_url }}" alt="{{ profile_user.username }}" class="profile-avatar-img" />
+      {% else %}
+        {{ profile_user.username[0].upper() }}
+      {% endif %}
+    </div>
+
+    <div class="profile-meta">
+      <h1 class="profile-username">{{ profile_user.username }}</h1>
+
+      <p class="profile-bio">
+        {% if profile_user.bio %}
+          {{ profile_user.bio }}
+        {% else %}
+          Masih misterius seperti kartu holo di booster pack terakhir. Belum ada bio nih.
+        {% endif %}
+      </p>
+
+      {% if profile_user.favorite_pokemon %}
+        <div class="profile-fav-pokemon">
+          Pokémon favorit: <strong>{{ profile_user.favorite_pokemon }}</strong>
+        </div>
+      {% endif %}
+
+      <div class="profile-stats-row">
+        <div class="profile-stat">
+          <span class="profile-stat-num">{{ listings|length }}</span>
+          <span class="profile-stat-label">Listing aktif</span>
+        </div>
+        <div class="profile-stat">
+          <span class="profile-stat-num">{{ orders_as_buyer|length }}</span>
+          <span class="profile-stat-label">Kartu dibeli</span>
+        </div>
+        <div class="profile-stat">
+          <span class="profile-stat-num">{{ profile_user.total_sales }}</span>
+          <span class="profile-stat-label">Total terjual</span>
+        </div>
+        <div class="profile-stat">
+          <span class="profile-stat-num">{{ "%.1f"|format(profile_user.seller_rating) }} ★</span>
+          <span class="profile-stat-label">Rating seller</span>
+        </div>
+      </div>
+
+      <div class="profile-joined">Bergabung sejak {{ profile_user.created_at.strftime('%B %Y') }}</div>
+
+      {% if current_user and current_user.id == profile_user.id %}
+        <button class="btn btn-ghost btn-sm profile-edit-btn" onclick="toggleEditForm()">Edit Profil</button>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if current_user and current_user.id == profile_user.id %}
+    <div class="profile-edit-form" id="editForm" style="display:none;">
+      <h2 class="profile-section-title">Edit Profil</h2>
+      <form method="POST" action="/profile/update" class="auth-form" enctype="multipart/form-data">
+        <div class="field-group">
+          <label class="field-label">Foto profil</label>
+          <div class="avatar-upload-wrap">
+            <div class="avatar-preview" id="avatarPreview">
+              {% if profile_user.avatar_url %}
+                <img src="{{ profile_user.avatar_url }}" id="avatarPreviewImg" />
+              {% else %}
+                <span id="avatarPreviewInitial">{{ profile_user.username[0].upper() }}</span>
+                <img id="avatarPreviewImg" style="display:none;" />
+              {% endif %}
+            </div>
+            <div class="avatar-upload-right">
+              <label for="avatarInput" class="btn btn-ghost btn-sm" style="cursor:pointer;">Pilih Foto</label>
+              <input type="file" id="avatarInput" name="avatar" accept="image/*" style="display:none;" onchange="previewAvatar(this)" />
+              <p class="avatar-upload-hint">JPG, PNG, atau WEBP. Maks 5MB.</p>
+            </div>
+          </div>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Bio</label>
+          <textarea name="bio" class="field-input field-textarea" placeholder="Ceritain dirimu...">{{ profile_user.bio or '' }}</textarea>
+        </div>
+        <div class="field-group">
+          <label class="field-label">Pokémon favorit</label>
+          <input type="text" name="favorite_pokemon" class="field-input" placeholder="Charizard, Umbreon, Snorlax..." value="{{ profile_user.favorite_pokemon or '' }}" />
+        </div>
+        <div class="profile-edit-actions">
+          <button type="submit" class="btn btn-primary">Simpan</button>
+          <button type="button" class="btn btn-ghost" onclick="toggleEditForm()">Batal</button>
+        </div>
+      </form>
+    </div>
+  {% endif %}
+
+  <div class="profile-body">
+
+    <div class="profile-section">
+      <h2 class="profile-section-title">Kartu yang dijual</h2>
+      {% if listings %}
+        <div class="card-grid">
+          {% for listing in listings %}
+            <a href="/listings/{{ listing.id }}" class="card-item">
+              <div class="card-img-wrap">
+                {% if listing.first_image %}
+                  <img src="{{ listing.first_image }}" alt="{{ listing.card.pokemon.name }}" class="card-img" loading="lazy" />
+                {% else %}
+                  <div class="card-img-placeholder"><span>No Image</span></div>
+                {% endif %}
+                <span class="rarity-badge rarity-{{ listing.card.rarity }}">
+                  {{ listing.card.rarity.replace('_', ' ').title() }}
+                </span>
+                <span class="listing-status-badge status-{{ listing.status }}">{{ listing.status.title() }}</span>
+              </div>
+              <div class="card-info">
+                <div class="card-name">{{ listing.card.pokemon.name }}</div>
+                <div class="card-set">{{ listing.card.set_name }}</div>
+                <div class="card-footer">
+                  <span class="card-price">Rp {{ "{:,.0f}".format(listing.price) }}</span>
+                  {% if listing.condition %}
+                    <span class="card-condition condition-{{ listing.condition }}">
+                      {{ listing.condition.replace('_', ' ').title() }}
+                    </span>
+                  {% endif %}
+                </div>
+              </div>
+            </a>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="profile-empty">
+          <div class="profile-empty-icon">◈</div>
+          <p class="profile-empty-title">Belum ada kartu yang dijual</p>
+          <p class="profile-empty-sub">Punya kartu yang mau dijual? Listing sekarang dan temukan pembelinya.</p>
+          {% if current_user and current_user.id == profile_user.id %}
+            <a href="/listings/new" class="btn btn-primary btn-sm" style="margin-top:16px">+ Jual Kartu Sekarang</a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+
+    <div class="profile-section">
+      <h2 class="profile-section-title">Kartu yang dibeli</h2>
+      {% if orders_as_buyer %}
+        <div class="orders-list">
+          {% for order in orders_as_buyer %}
+            <div class="order-row">
+              <div class="order-img-wrap">
+                {% if order.listing.first_image %}
+                  <img src="{{ order.listing.first_image }}" alt="{{ order.listing.card.pokemon.name }}" class="order-img" />
+                {% else %}
+                  <div class="order-img-placeholder">?</div>
+                {% endif %}
+              </div>
+              <div class="order-info">
+                <div class="order-card-name">{{ order.listing.card.pokemon.name }}</div>
+                <div class="order-card-set">{{ order.listing.card.set_name }}</div>
+                <div class="order-seller">dari {{ order.listing.seller.username }}</div>
+              </div>
+              <div class="order-right">
+                <div class="order-price">Rp {{ "{:,.0f}".format(order.total_price) }}</div>
+                <span class="order-status-badge status-{{ order.status }}">{{ order.status.title() }}</span>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% else %}
+        <div class="profile-empty">
+          <div class="profile-empty-icon">○</div>
+          <p class="profile-empty-title">Belum ada kartu yang dibeli</p>
+          <p class="profile-empty-sub">Temukan kartu impianmu di marketplace dan mulai koleksinya.</p>
+          <a href="/" class="btn btn-primary btn-sm" style="margin-top:16px">Lihat Semua Kartu</a>
+        </div>
+      {% endif %}
+    </div>
+
+  </div>
+</div>
+
+<script>
+function toggleEditForm() {
+  const form = document.getElementById('editForm')
+  form.style.display = form.style.display === 'none' ? 'block' : 'none'
+}
+
+function previewAvatar(input) {
+  const file = input.files[0]
+  if (!file) return
+  const reader = new FileReader()
+  reader.onload = e => {
+    const img = document.getElementById('avatarPreviewImg')
+    const initial = document.getElementById('avatarPreviewInitial')
+    img.src = e.target.result
+    img.style.display = 'block'
+    if (initial) initial.style.display = 'none'
+  }
+  reader.readAsDataURL(file)
+}
+</script>
+{% endblock %}

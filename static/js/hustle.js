@@ -4,7 +4,7 @@ const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)]
 function handleSearch() {
   const q = $('#searchInput')?.value.trim()
   if (!q) return
-  window.location.href = `/listings?q=${encodeURIComponent(q)}`
+  window.location.href = `/?q=${encodeURIComponent(q)}`
 }
 
 $('#searchInput')?.addEventListener('keydown', e => {
@@ -14,16 +14,13 @@ $('#searchInput')?.addEventListener('keydown', e => {
 function applyFilter(changedEl) {
   const params = new URLSearchParams(window.location.search)
   params.delete('page')
-
   const name  = changedEl.getAttribute('name')
   const value = changedEl.value
-
   if (value) {
     params.set(name, value)
   } else {
     params.delete(name)
   }
-
   window.location.search = params.toString()
 }
 
@@ -49,4 +46,21 @@ if ('IntersectionObserver' in window) {
     img.style.transition = 'opacity 0.3s'
     imgObs.observe(img)
   })
+}
+
+const avatarBtn = $('#userAvatarBtn')
+const dropdown = $('#userDropdown')
+
+if (avatarBtn && dropdown) {
+  avatarBtn.addEventListener('click', e => {
+    e.stopPropagation()
+    const isOpen = dropdown.classList.contains('open')
+    dropdown.classList.toggle('open', !isOpen)
+  })
+
+  document.addEventListener('click', () => {
+    dropdown.classList.remove('open')
+  })
+
+  dropdown.addEventListener('click', e => e.stopPropagation())
 }

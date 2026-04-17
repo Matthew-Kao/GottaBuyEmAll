@@ -10,7 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="/static/css/drip.css?v=2" />
+    <link rel="stylesheet" href="/static/css/drip.css?v=3" />
     {% block extra_head %}{% endblock %}
   </head>
   <body>
@@ -45,9 +45,7 @@
 
         <div class="nav-actions">
           {% if current_user %}
-          <a href="/listings/new" class="btn btn-primary btn-sm"
-            >+ Jual Kartu</a
-          >
+          <a href="/sell" class="btn btn-primary btn-sm">+ Jual Kartu</a>
           <a href="/profile" class="user-avatar">
             {% if current_user.avatar_url %}
             <img
@@ -62,7 +60,6 @@
             />
             {% else %} {{ current_user.username[0].upper() }} {% endif %}
           </a>
-
           <a href="/auth/logout" class="btn btn-ghost btn-sm">Keluar</a>
           {% else %}
           <a href="/auth/login" class="btn btn-ghost btn-sm">Masuk</a>

@@ -15,6 +15,7 @@ from app.models.pokemon import Pokemon
 from app.core.dependencies import get_current_user
 from app.core.cloudinary import upload_image
 from app.routers import auth as auth_router
+from app.routers import listings as listings_router
 from app.config import settings
 
 import app.models
@@ -26,6 +27,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="app/templates")
 
 app.include_router(auth_router.router)
+app.include_router(listings_router.router)
 
 
 @app.on_event("startup")

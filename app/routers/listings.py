@@ -198,3 +198,22 @@ async def listing_detail(
         "listing": listing,
         "images": listing.image_urls.split(",") if listing.image_urls else [],
     })
+
+@router.post("/listings/{listing_id}/delete")
+async def delete_listing(
+    listing_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    if not current_user:
+        return RedirectResponse("/auth/login", status_code=302)
+ 
+    listing = db.query(Listing).filter(Listing.id == listing_id).first()
+ 
+    if not listing or listing.seller_id != current_user.id:
+        return RedirectResponse("/", status_code=302)
+ 
+    listing.status = "removed"
+    db.commit()
+ 
+    return RedirectResponse("/profile", status_code=302)

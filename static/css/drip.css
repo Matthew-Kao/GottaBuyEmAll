@@ -2079,3 +2079,26 @@ input {
 .detail-back:hover {
   color: var(--text-primary);
 }
+
+.btn-delete {
+  background: rgba(224, 82, 82, 0.25);
+  color: #ff6b6b;
+  border: 1px solid rgba(224, 82, 82, 0.6);
+  padding: 12px;
+  font-size: 15px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-display);
+  font-weight: 600;
+  transition:
+    background 0.18s,
+    border-color 0.18s;
+  cursor: pointer;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.btn-delete:hover {
+  background: rgba(224, 82, 82, 0.25);
+  border-color: rgba(224, 82, 82, 0.5);
+}

@@ -129,6 +129,18 @@ GottaBuyEmAll{% endblock %} {% block content %}
       {% elif current_user.id == listing.seller_id %}
       <div class="detail-actions">
         <div class="own-listing-note">Ini listing kamu sendiri.</div>
+        {% if listing.status == 'active' %}
+        <form
+          method="POST"
+          action="/listings/{{ listing.id }}/delete"
+          style="margin-top: 12px"
+          onsubmit="return confirm('Yakin mau hapus listing ini?');"
+        >
+          <button type="submit" class="btn btn-delete btn-full">
+            Hapus Listing
+          </button>
+        </form>
+        {% endif %}
       </div>
       {% endif %}
     </div>

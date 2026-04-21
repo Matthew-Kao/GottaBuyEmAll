@@ -1,0 +1,224 @@
+{% extends "shell.html" %} {% block title %}Cara Kerja & FAQ — GottaBuyEmAll{%
+endblock %} {% block content %}
+<div class="info-wrap">
+  <div class="info-hero">
+    <div class="info-hero-inner">
+      <div class="hero-eyebrow">Transparansi & Keamanan</div>
+      <h1 class="info-title">Cara Kerja <em>GottaBuyEmAll</em></h1>
+      <p class="info-sub">
+        Marketplace kartu Pokémon pertama di Indonesia dengan sistem escrow —
+        dana pembeli aman sampai kartu diterima.
+      </p>
+    </div>
+  </div>
+
+  <div class="info-section">
+    <div class="info-inner">
+      <h2 class="info-section-title">Proses Jual Beli</h2>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">01</div>
+          <h3 class="step-title">Seller listing kartu</h3>
+          <p class="step-desc">
+            Seller cari kartu dari database global pokemontcg.io, upload foto
+            kartu asli, set harga dan kondisi. Listing langsung live di
+            marketplace.
+          </p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">02</div>
+          <h3 class="step-title">Buyer klik Beli Sekarang</h3>
+          <p class="step-desc">
+            Buyer melakukan pembayaran. Dana tidak langsung masuk ke seller —
+            dana ditahan dulu di sistem escrow GottaBuyEmAll.
+          </p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">03</div>
+          <h3 class="step-title">Seller kirim kartu</h3>
+          <p class="step-desc">
+            Seller mengemas dan mengirim kartu ke alamat buyer, lalu memasukkan
+            nomor resi sebagai bukti pengiriman.
+          </p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">04</div>
+          <h3 class="step-title">Buyer konfirmasi terima</h3>
+          <p class="step-desc">
+            Setelah kartu diterima dan kondisi sesuai, buyer klik konfirmasi.
+            Baru setelah itu dana dilepas ke seller.
+          </p>
+        </div>
+      </div>
+
+      <div class="escrow-highlight">
+        <div class="escrow-highlight-icon">🔒</div>
+        <div class="escrow-highlight-text">
+          <h3>Kenapa pakai sistem escrow?</h3>
+          <p>
+            Di marketplace kartu Pokémon, risiko penipuan sangat tinggi — seller
+            kabur setelah dibayar, atau kartu yang datang beda kondisi. Sistem
+            escrow kami memastikan dana buyer aman sampai kartu benar-benar
+            diterima. Seller juga terlindungi karena dana sudah masuk sebelum
+            mereka kirim.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-section info-section--alt">
+    <div class="info-inner">
+      <h2 class="info-section-title">FAQ</h2>
+      <div class="faq-list">
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Apakah dana saya aman jika seller tidak kirim kartu?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Ya. Dana kamu ditahan di escrow dan hanya dilepas ke seller setelah
+            kamu konfirmasi kartu sudah diterima. Jika seller tidak kirim dalam
+            3 hari kerja, kamu bisa buka dispute dan dana akan dikembalikan
+            penuh.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Bagaimana jika kartu yang datang tidak sesuai deskripsi?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Jangan klik konfirmasi dulu. Buka dispute dengan menyertakan foto
+            kartu yang diterima. Tim kami akan memediasi dan memutuskan apakah
+            dana dikembalikan ke buyer atau dilepas ke seller berdasarkan bukti
+            yang ada.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Berapa lama proses pencairan dana ke seller?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Setelah buyer konfirmasi penerimaan, dana akan dicairkan ke rekening
+            seller dalam 1x24 jam di hari kerja.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Apakah ada biaya untuk berjualan di GottaBuyEmAll?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Listing gratis. GottaBuyEmAll mengambil komisi kecil dari setiap
+            transaksi yang berhasil. Detail biaya akan ditampilkan saat proses
+            checkout.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Kartu apa saja yang bisa dijual di sini?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Semua kartu Pokémon TCG resmi — dari Base Set 1999 sampai set
+            terbaru. Kartu graded (PSA, BGS, CGC, MGA) juga diterima dan ada
+            field khusus untuk informasi grading.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Bagaimana cara verifikasi keaslian kartu?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Seller wajib upload foto kartu asli mereka — bukan gambar dari
+            internet. Untuk kartu graded, cert number bisa dicek langsung di
+            website PSA, BGS, atau CGC. Kami juga mendorong buyer untuk meminta
+            foto tambahan sebelum membeli.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Metode pembayaran apa yang diterima?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Saat ini kami sedang mengintegrasikan payment gateway lokal
+            Indonesia. Segera tersedia: transfer bank, GoPay, OVO, Dana, dan
+            kartu kredit/debit.
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <button class="faq-question" onclick="toggleFaq(this)">
+            Apakah bisa jual kartu tanpa grading?
+            <span class="faq-icon">+</span>
+          </button>
+          <div class="faq-answer">
+            Tentu. Grading adalah opsional. Kamu cukup pilih kondisi kartu
+            (Mint, Near Mint, Played, atau Damaged) dan upload foto kartu
+            aslimu.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-cta-section">
+    <div class="info-inner" style="text-align: center">
+      <h2 class="info-section-title" style="margin-bottom: 12px">
+        Siap mulai?
+      </h2>
+      <p
+        style="
+          color: var(--text-secondary);
+          font-size: 15px;
+          margin-bottom: 28px;
+        "
+      >
+        Jual kartu koleksimu atau temukan kartu impian dengan aman.
+      </p>
+      <div
+        style="
+          display: flex;
+          gap: 12px;
+          justify-content: center;
+          flex-wrap: wrap;
+        "
+      >
+        <a href="/sell" class="btn btn-primary btn-lg">+ Jual Kartu</a>
+        <a href="/" class="btn btn-ghost btn-lg">Lihat Marketplace</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleFaq(btn) {
+    const item = btn.parentElement;
+    const answer = item.querySelector(".faq-answer");
+    const icon = btn.querySelector(".faq-icon");
+    const isOpen = item.classList.contains("open");
+
+    document.querySelectorAll(".faq-item.open").forEach((el) => {
+      el.classList.remove("open");
+      el.querySelector(".faq-answer").style.maxHeight = null;
+      el.querySelector(".faq-icon").textContent = "+";
+    });
+
+    if (!isOpen) {
+      item.classList.add("open");
+      answer.style.maxHeight = answer.scrollHeight + "px";
+      icon.textContent = "−";
+    }
+  }
+</script>
+{% endblock %}

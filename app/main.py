@@ -180,3 +180,20 @@ async def update_profile(
 
     db.commit()
     return RedirectResponse("/profile", status_code=302)
+
+@app.get("/how-it-works", response_class=HTMLResponse)
+async def how_it_works(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+):
+    return templates.TemplateResponse(request, "cara_kerja.html", {
+        "current_user": current_user,
+    })
+ 
+ 
+@app.get("/faq", response_class=HTMLResponse)
+async def faq(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+):
+    return RedirectResponse("/how-it-works", status_code=302)

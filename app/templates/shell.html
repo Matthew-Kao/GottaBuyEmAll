@@ -58,7 +58,7 @@
                 border-radius: 50%;
               "
             />
-            {% else %} {{ current_user.username[0].upper() }} {% endif %}
+            {% else %}{{ current_user.username[0].upper() }}{% endif %}
           </a>
           <a href="/auth/logout" class="btn btn-ghost btn-sm">Keluar</a>
           {% else %}
@@ -97,20 +97,19 @@
         </div>
         <div class="footer-links">
           <div class="footer-col">
-            <span class="footer-col-title">Marketplace</span>
-            <a href="/">Semua Listing</a>
-            <a href="/?rarity=rare">Rare Cards</a>
-            <a href="/?condition=mint">Mint Condition</a>
-          </div>
-          <div class="footer-col">
             <span class="footer-col-title">Akun</span>
+            {% if current_user %}
+            <a href="/profile">Profil Saya</a>
+            <a href="/sell">Jual Kartu</a>
+            <a href="/auth/logout">Keluar</a>
+            {% else %}
             <a href="/auth/register">Daftar</a>
             <a href="/auth/login">Masuk</a>
+            {% endif %}
           </div>
           <div class="footer-col">
             <span class="footer-col-title">Info</span>
-            <a href="/how-it-works">Cara Kerja</a>
-            <a href="/faq">FAQ</a>
+            <a href="/how-it-works">Cara Kerja & FAQ</a>
           </div>
         </div>
       </div>

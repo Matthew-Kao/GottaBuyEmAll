@@ -3,7 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.responses import HTMLResponse, RedirectResponse
 from sqlalchemy.orm import Session, joinedload
-from sqlalchemy import asc, desc
+from sqlalchemy import asc, desc, or_
 from starlette.middleware.sessions import SessionMiddleware
 
 from app.database import get_db, engine, Base
@@ -44,10 +44,14 @@ async def homepage(
     rarity: str = Query(default=""),
     sort: str = Query(default="newest"),
     page: int = Query(default=1, ge=1),
+    q: str = Query(default=""),
 ):
     per_page = 20
     query = (
         db.query(Listing)
+        .join(Listing.card)
+        .join(Card.pokemon)
+        .join(Listing.seller)
         .options(
             joinedload(Listing.card).joinedload(Card.pokemon),
             joinedload(Listing.seller),
@@ -60,7 +64,20 @@ async def homepage(
         query = query.filter(Listing.condition == condition)
 
     if rarity:
-        query = query.join(Listing.card).filter(Card.rarity == rarity)
+        query = query.filter(Card.rarity == rarity)
+
+    if q:
+        terms = q.strip().split()
+        for term in terms:
+            pattern = f"%{term}%"
+            query = query.filter(
+                or_(
+                    Pokemon.name.ilike(pattern),
+                    Card.set_name.ilike(pattern),
+                    Card.card_variant.ilike(pattern),
+                    User.username.ilike(pattern),
+                )
+            )
 
     if sort == "price_asc":
         query = query.order_by(asc(Listing.price))
@@ -114,6 +131,7 @@ async def homepage(
         "filters": {"condition": condition, "rarity": rarity, "sort": sort},
         "page": page,
         "total_pages": total_pages,
+        "q": q,
     })
 
 
@@ -181,6 +199,7 @@ async def update_profile(
     db.commit()
     return RedirectResponse("/profile", status_code=302)
 
+
 @app.get("/how-it-works", response_class=HTMLResponse)
 async def how_it_works(
     request: Request,
@@ -189,8 +208,8 @@ async def how_it_works(
     return templates.TemplateResponse(request, "cara_kerja.html", {
         "current_user": current_user,
     })
- 
- 
+
+
 @app.get("/faq", response_class=HTMLResponse)
 async def faq(
     request: Request,

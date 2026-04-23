@@ -1,66 +1,72 @@
-const $ = (sel, ctx = document) => ctx.querySelector(sel)
-const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)]
+const $ = (sel, ctx = document) => ctx.querySelector(sel);
+const $$ = (sel, ctx = document) => [...ctx.querySelectorAll(sel)];
 
 function handleSearch() {
-  const q = $('#searchInput')?.value.trim()
-  if (!q) return
-  window.location.href = `/?q=${encodeURIComponent(q)}`
+  const q = $("#searchInput")?.value.trim();
+  if (!q) {
+    window.location.href = "/";
+    return;
+  }
+  window.location.href = `/?q=${encodeURIComponent(q)}`;
 }
 
-$('#searchInput')?.addEventListener('keydown', e => {
-  if (e.key === 'Enter') handleSearch()
-})
+$("#searchInput")?.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") handleSearch();
+});
 
 function applyFilter(changedEl) {
-  const params = new URLSearchParams(window.location.search)
-  params.delete('page')
-  const name  = changedEl.getAttribute('name')
-  const value = changedEl.value
+  const params = new URLSearchParams(window.location.search);
+  params.delete("page");
+  const name = changedEl.getAttribute("name");
+  const value = changedEl.value;
   if (value) {
-    params.set(name, value)
+    params.set(name, value);
   } else {
-    params.delete(name)
+    params.delete(name);
   }
-  window.location.search = params.toString()
+  window.location.search = params.toString();
 }
 
-$$('.flash').forEach(el => {
+$$(".flash").forEach((el) => {
   setTimeout(() => {
-    el.style.transition = 'opacity 0.4s'
-    el.style.opacity = '0'
-    setTimeout(() => el.remove(), 400)
-  }, 4000)
-})
+    el.style.transition = "opacity 0.4s";
+    el.style.opacity = "0";
+    setTimeout(() => el.remove(), 400);
+  }, 4000);
+});
 
-if ('IntersectionObserver' in window) {
-  const imgObs = new IntersectionObserver((entries, obs) => {
-    entries.forEach(({ isIntersecting, target }) => {
-      if (!isIntersecting) return
-      target.style.opacity = '1'
-      obs.unobserve(target)
-    })
-  }, { threshold: 0.1 })
+if ("IntersectionObserver" in window) {
+  const imgObs = new IntersectionObserver(
+    (entries, obs) => {
+      entries.forEach(({ isIntersecting, target }) => {
+        if (!isIntersecting) return;
+        target.style.opacity = "1";
+        obs.unobserve(target);
+      });
+    },
+    { threshold: 0.1 },
+  );
 
-  $$('img.card-img').forEach(img => {
-    img.style.opacity = '0'
-    img.style.transition = 'opacity 0.3s'
-    imgObs.observe(img)
-  })
+  $$("img.card-img").forEach((img) => {
+    img.style.opacity = "0";
+    img.style.transition = "opacity 0.3s";
+    imgObs.observe(img);
+  });
 }
 
-const avatarBtn = $('#userAvatarBtn')
-const dropdown = $('#userDropdown')
+const avatarBtn = $("#userAvatarBtn");
+const dropdown = $("#userDropdown");
 
 if (avatarBtn && dropdown) {
-  avatarBtn.addEventListener('click', e => {
-    e.stopPropagation()
-    const isOpen = dropdown.classList.contains('open')
-    dropdown.classList.toggle('open', !isOpen)
-  })
+  avatarBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const isOpen = dropdown.classList.contains("open");
+    dropdown.classList.toggle("open", !isOpen);
+  });
 
-  document.addEventListener('click', () => {
-    dropdown.classList.remove('open')
-  })
+  document.addEventListener("click", () => {
+    dropdown.classList.remove("open");
+  });
 
-  dropdown.addEventListener('click', e => e.stopPropagation())
+  dropdown.addEventListener("click", (e) => e.stopPropagation());
 }

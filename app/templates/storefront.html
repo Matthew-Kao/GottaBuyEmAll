@@ -4,215 +4,212 @@
 
 {% block content %}
 
-  <section class="hero">
-    <div class="hero-inner">
-
-      <div class="hero-left">
-        <div class="hero-eyebrow">Marketplace #1 Indonesia</div>
-        <h1 class="hero-title">
-          Beli &amp; Jual<br/>
-          <em>Kartu Pokémon</em><br/>
-          dengan Aman
-        </h1>
-        <p class="hero-sub">
-          Dana kamu aman sampai kartu di tangan.
-          Sistem escrow kami melindungi setiap transaksi.
-        </p>
-        <div class="hero-cta">
-          <a href="/listings" class="btn btn-primary btn-lg">Lihat Semua Kartu</a>
-          <a href="/how-it-works" class="btn btn-ghost btn-lg">Cara Kerja →</a>
-        </div>
-
-        <div class="hero-stats">
-          <div class="stat-item">
-            <span class="stat-num">{{ stats.total_listings }}</span>
-            <span class="stat-label">Kartu listing</span>
-          </div>
-          <div class="stat-divider"></div>
-          <div class="stat-item">
-            <span class="stat-num">{{ stats.active_sellers }}</span>
-            <span class="stat-label">Seller aktif</span>
-          </div>
-          <div class="stat-divider"></div>
-          <div class="stat-item">
-            <span class="stat-num">{{ stats.price_range }}</span>
-            <span class="stat-label">Range harga</span>
-          </div>
-        </div>
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow">Marketplace #1 Indonesia</div>
+      <h1 class="hero-title">
+        Beli &amp; Jual<br/>
+        <em>Kartu Pokémon</em><br/>
+        dengan Aman
+      </h1>
+      <p class="hero-sub">
+        Dana kamu aman sampai kartu di tangan. Sistem escrow kami melindungi setiap transaksi.
+      </p>
+      <div class="hero-cta">
+        <a href="/" class="btn btn-primary btn-lg">Lihat Semua Kartu</a>
+        <a href="/how-it-works" class="btn btn-ghost btn-lg">Cara Kerja →</a>
       </div>
 
-      <div class="hero-right">
-        <div class="card-stack">
-
-          {% if hero_listings|length >= 3 %}
-            <div class="stack-card stack-card--back">
-              <img src="{{ hero_listings[2].first_image }}" alt="{{ hero_listings[2].card.pokemon.name }}" class="stack-img" />
-              <div class="stack-card-overlay">
-                <div class="fake-card-name">{{ hero_listings[2].card.pokemon.name }}</div>
-                <div class="fake-card-set">{{ hero_listings[2].card.rarity.replace('_', ' ').title() }} · {{ hero_listings[2].card.set_name }}</div>
-                <div class="fake-card-price">Rp {{ "{:,.0f}".format(hero_listings[2].price) }}</div>
-              </div>
-            </div>
-          {% endif %}
-
-          {% if hero_listings|length >= 2 %}
-            <div class="stack-card stack-card--mid">
-              <img src="{{ hero_listings[1].first_image }}" alt="{{ hero_listings[1].card.pokemon.name }}" class="stack-img" />
-              <div class="stack-card-overlay">
-                <div class="fake-card-name">{{ hero_listings[1].card.pokemon.name }}</div>
-                <div class="fake-card-set">{{ hero_listings[1].card.rarity.replace('_', ' ').title() }} · {{ hero_listings[1].card.set_name }}</div>
-                <div class="fake-card-price">Rp {{ "{:,.0f}".format(hero_listings[1].price) }}</div>
-              </div>
-            </div>
-          {% endif %}
-
-          {% if hero_listings|length >= 1 %}
-            <div class="stack-card stack-card--front">
-              <img src="{{ hero_listings[0].first_image }}" alt="{{ hero_listings[0].card.pokemon.name }}" class="stack-img" />
-              <div class="stack-card-overlay">
-                <div class="fake-card-name">{{ hero_listings[0].card.pokemon.name }}</div>
-                <div class="fake-card-set">{{ hero_listings[0].card.rarity.replace('_', ' ').title() }} · {{ hero_listings[0].card.set_name }}</div>
-                <div class="fake-card-price">Rp {{ "{:,.0f}".format(hero_listings[0].price) }}</div>
-              </div>
-            </div>
-          {% endif %}
-
-          <div class="stack-escrow-badge">
-            <span class="escrow-dot"></span>
-            Dana escrow aktif
-          </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <span class="stat-num">{{ stats.total_listings }}</span>
+          <span class="stat-label">Kartu listing</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num">{{ stats.active_sellers }}</span>
+          <span class="stat-label">Seller aktif</span>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <span class="stat-num">{{ stats.price_range }}</span>
+          <span class="stat-label">Range harga</span>
         </div>
       </div>
-
     </div>
-  </section>
 
-  <section class="listings-section">
-    <div class="listings-inner">
-
-      <div class="listings-header">
-        <h2 class="section-title">Listing Terbaru</h2>
-        <div class="filter-bar">
-
-          <div class="filter-group">
-            <label class="filter-label">Kondisi</label>
-            <select class="filter-select" name="condition" onchange="applyFilter(this)">
-              <option value="">Semua</option>
-              <option value="mint" {% if filters.condition == 'mint' %}selected{% endif %}>Mint</option>
-              <option value="near_mint" {% if filters.condition == 'near_mint' %}selected{% endif %}>Near Mint</option>
-              <option value="played" {% if filters.condition == 'played' %}selected{% endif %}>Played</option>
-              <option value="damaged" {% if filters.condition == 'damaged' %}selected{% endif %}>Damaged</option>
-            </select>
+    <div class="hero-right">
+      <div class="card-stack">
+        {% if hero_listings|length >= 3 %}
+        <div class="stack-card stack-card--back">
+          <img src="{{ hero_listings[2].first_image }}" alt="{{ hero_listings[2].card.pokemon.name }}" class="stack-img" />
+          <div class="stack-card-overlay">
+            <div class="fake-card-name">{{ hero_listings[2].card.pokemon.name }}</div>
+            <div class="fake-card-set">{{ hero_listings[2].card.rarity.replace('_', ' ').title() }} · {{ hero_listings[2].card.set_name }}</div>
+            <div class="fake-card-price">Rp {{ "{:,.0f}".format(hero_listings[2].price) }}</div>
           </div>
-
-          <div class="filter-group">
-            <label class="filter-label">Rarity</label>
-            <select class="filter-select" name="rarity" onchange="applyFilter(this)">
-              <option value="">Semua</option>
-              <option value="common" {% if filters.rarity == 'common' %}selected{% endif %}>Common</option>
-              <option value="uncommon" {% if filters.rarity == 'uncommon' %}selected{% endif %}>Uncommon</option>
-              <option value="rare" {% if filters.rarity == 'rare' %}selected{% endif %}>Rare</option>
-              <option value="ultra_rare" {% if filters.rarity == 'ultra_rare' %}selected{% endif %}>Ultra Rare</option>
-              <option value="secret_rare" {% if filters.rarity == 'secret_rare' %}selected{% endif %}>Secret Rare</option>
-            </select>
-          </div>
-
-          <div class="filter-group">
-            <label class="filter-label">Urut</label>
-            <select class="filter-select" name="sort" onchange="applyFilter(this)">
-              <option value="newest" {% if filters.sort == 'newest' or not filters.sort %}selected{% endif %}>Terbaru</option>
-              <option value="price_asc" {% if filters.sort == 'price_asc' %}selected{% endif %}>Harga terendah</option>
-              <option value="price_desc" {% if filters.sort == 'price_desc' %}selected{% endif %}>Harga tertinggi</option>
-            </select>
-          </div>
-
         </div>
-      </div>
-
-      {% if listings %}
-        <div class="card-grid">
-          {% for listing in listings %}
-            <a href="/listings/{{ listing.id }}" class="card-item">
-              <div class="card-img-wrap">
-                {% if listing.first_image %}
-                  <img src="{{ listing.first_image }}" alt="{{ listing.card.pokemon.name }}" class="card-img" loading="lazy" />
-                {% else %}
-                  <div class="card-img-placeholder">
-                    <span>No Image</span>
-                  </div>
-                {% endif %}
-                <span class="rarity-badge rarity-{{ listing.card.rarity }}">
-                  {{ listing.card.rarity.replace('_', ' ').title() }}
-                </span>
-                {% if listing.is_graded %}
-                  <span class="graded-badge">
-                    {{ listing.grading.grading_service }} {{ listing.grading.grade }}
-                  </span>
-                {% endif %}
-              </div>
-              <div class="card-info">
-                <div class="card-name">{{ listing.card.pokemon.name }}</div>
-                <div class="card-set">{{ listing.card.set_name }} · {{ listing.card.card_variant.replace('_', ' ').title() }}</div>
-                <div class="card-footer">
-                  <span class="card-price">Rp {{ "{:,.0f}".format(listing.price) }}</span>
-                  {% if listing.condition %}
-                    <span class="card-condition condition-{{ listing.condition }}">
-                      {{ listing.condition.replace('_', ' ').title() }}
-                    </span>
-                  {% endif %}
-                </div>
-                <div class="card-seller">
-                  <span class="seller-dot"></span>
-                  {{ listing.seller.username }}
-                </div>
-              </div>
-            </a>
-          {% endfor %}
-        </div>
-
-        {% if total_pages > 1 %}
-          <div class="pagination">
-            {% if page > 1 %}
-              <a href="?page={{ page - 1 }}&condition={{ filters.condition }}&rarity={{ filters.rarity }}&sort={{ filters.sort }}" class="page-btn">← Sebelumnya</a>
-            {% endif %}
-            <span class="page-info">{{ page }} / {{ total_pages }}</span>
-            {% if page < total_pages %}
-              <a href="?page={{ page + 1 }}&condition={{ filters.condition }}&rarity={{ filters.rarity }}&sort={{ filters.sort }}" class="page-btn">Selanjutnya →</a>
-            {% endif %}
-          </div>
         {% endif %}
 
-      {% else %}
-        <div class="empty-state">
-          <div class="empty-icon">◈</div>
-          <p>Tidak ada kartu yang cocok. <a href="/">Reset filter</a></p>
+        {% if hero_listings|length >= 2 %}
+        <div class="stack-card stack-card--mid">
+          <img src="{{ hero_listings[1].first_image }}" alt="{{ hero_listings[1].card.pokemon.name }}" class="stack-img" />
+          <div class="stack-card-overlay">
+            <div class="fake-card-name">{{ hero_listings[1].card.pokemon.name }}</div>
+            <div class="fake-card-set">{{ hero_listings[1].card.rarity.replace('_', ' ').title() }} · {{ hero_listings[1].card.set_name }}</div>
+            <div class="fake-card-price">Rp {{ "{:,.0f}".format(hero_listings[1].price) }}</div>
+          </div>
         </div>
-      {% endif %}
+        {% endif %}
 
-    </div>
-  </section>
+        {% if hero_listings|length >= 1 %}
+        <div class="stack-card stack-card--front">
+          <img src="{{ hero_listings[0].first_image }}" alt="{{ hero_listings[0].card.pokemon.name }}" class="stack-img" />
+          <div class="stack-card-overlay">
+            <div class="fake-card-name">{{ hero_listings[0].card.pokemon.name }}</div>
+            <div class="fake-card-set">{{ hero_listings[0].card.rarity.replace('_', ' ').title() }} · {{ hero_listings[0].card.set_name }}</div>
+            <div class="fake-card-price">Rp {{ "{:,.0f}".format(hero_listings[0].price) }}</div>
+          </div>
+        </div>
+        {% endif %}
 
-  <section class="trust-section">
-    <div class="trust-inner">
-      <h2 class="section-title centered">Kenapa GottaBuyEmAll?</h2>
-      <div class="trust-grid">
-        <div class="trust-card">
-          <div class="trust-icon">⬡</div>
-          <h3>Dana Escrow</h3>
-          <p>Pembayaran kamu ditahan aman sampai kartu tiba dan kamu konfirmasi. Seller baru dapat dana setelah itu.</p>
-        </div>
-        <div class="trust-card">
-          <div class="trust-icon">◈</div>
-          <h3>Seller Terverifikasi</h3>
-          <p>Setiap seller punya rating dan riwayat transaksi yang transparan. Kamu bisa lihat track record sebelum beli.</p>
-        </div>
-        <div class="trust-card">
-          <div class="trust-icon">○</div>
-          <h3>Dispute Protection</h3>
-          <p>Ada masalah? Tim kami siap bantu resolve. Jika kartu tidak sesuai, kamu bisa ajukan dispute untuk refund.</p>
+        <div class="stack-escrow-badge">
+          <span class="escrow-dot"></span>
+          Dana escrow aktif
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
+
+<section class="listings-section">
+  <div class="listings-inner">
+    <div class="listings-header">
+      <h2 class="section-title">
+        {% if q %}
+          Hasil pencarian: "{{ q }}"
+        {% else %}
+          Listing Terbaru
+        {% endif %}
+      </h2>
+      <div class="filter-bar">
+        <div class="filter-group">
+          <label class="filter-label">Kondisi</label>
+          <select class="filter-select" name="condition" onchange="applyFilter(this)">
+            <option value="">Semua</option>
+            <option value="mint" {% if filters.condition == 'mint' %}selected{% endif %}>Mint</option>
+            <option value="near_mint" {% if filters.condition == 'near_mint' %}selected{% endif %}>Near Mint</option>
+            <option value="played" {% if filters.condition == 'played' %}selected{% endif %}>Played</option>
+            <option value="damaged" {% if filters.condition == 'damaged' %}selected{% endif %}>Damaged</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Rarity</label>
+          <select class="filter-select" name="rarity" onchange="applyFilter(this)">
+            <option value="">Semua</option>
+            <option value="common" {% if filters.rarity == 'common' %}selected{% endif %}>Common</option>
+            <option value="uncommon" {% if filters.rarity == 'uncommon' %}selected{% endif %}>Uncommon</option>
+            <option value="rare" {% if filters.rarity == 'rare' %}selected{% endif %}>Rare</option>
+            <option value="ultra_rare" {% if filters.rarity == 'ultra_rare' %}selected{% endif %}>Ultra Rare</option>
+            <option value="secret_rare" {% if filters.rarity == 'secret_rare' %}selected{% endif %}>Secret Rare</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label">Urut</label>
+          <select class="filter-select" name="sort" onchange="applyFilter(this)">
+            <option value="newest" {% if filters.sort == 'newest' or not filters.sort %}selected{% endif %}>Terbaru</option>
+            <option value="price_asc" {% if filters.sort == 'price_asc' %}selected{% endif %}>Harga terendah</option>
+            <option value="price_desc" {% if filters.sort == 'price_desc' %}selected{% endif %}>Harga tertinggi</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    {% if listings %}
+    <div class="card-grid">
+      {% for listing in listings %}
+      <a href="/listings/{{ listing.id }}" class="card-item">
+        <div class="card-img-wrap">
+          {% if listing.first_image %}
+          <img src="{{ listing.first_image }}" alt="{{ listing.card.pokemon.name }}" class="card-img" loading="lazy" />
+          {% else %}
+          <div class="card-img-placeholder"><span>No Image</span></div>
+          {% endif %}
+          <span class="rarity-badge rarity-{{ listing.card.rarity }}">
+            {{ listing.card.rarity.replace('_', ' ').title() }}
+          </span>
+          {% if listing.is_graded %}
+          <span class="graded-badge">
+            {{ listing.grading.grading_service }} {{ listing.grading.grade }}
+          </span>
+          {% endif %}
+        </div>
+        <div class="card-info">
+          <div class="card-name">{{ listing.card.pokemon.name }}</div>
+          <div class="card-set">{{ listing.card.set_name }} · {{ listing.card.card_variant.replace('_', ' ').title() }}</div>
+          <div class="card-footer">
+            <span class="card-price">Rp {{ "{:,.0f}".format(listing.price) }}</span>
+            {% if listing.condition %}
+            <span class="card-condition condition-{{ listing.condition }}">
+              {{ listing.condition.replace('_', ' ').title() }}
+            </span>
+            {% endif %}
+          </div>
+          <div class="card-seller">
+            <span class="seller-dot"></span>
+            {{ listing.seller.username }}
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+
+    {% if total_pages > 1 %}
+    <div class="pagination">
+      {% if page > 1 %}
+      <a href="?page={{ page - 1 }}&amp;condition={{ filters.condition }}&amp;rarity={{ filters.rarity }}&amp;sort={{ filters.sort }}&amp;q={{ q }}" class="page-btn">← Sebelumnya</a>
+      {% endif %}
+      <span class="page-info">{{ page }} / {{ total_pages }}</span>
+      {% if page < total_pages %}
+      <a href="?page={{ page + 1 }}&amp;condition={{ filters.condition }}&amp;rarity={{ filters.rarity }}&amp;sort={{ filters.sort }}&amp;q={{ q }}" class="page-btn">Selanjutnya →</a>
+      {% endif %}
+    </div>
+    {% endif %}
+
+    {% else %}
+    <div class="empty-state">
+      <div class="empty-icon">◈</div>
+      <p>Tidak ada kartu yang cocok. <a href="/">Reset filter</a></p>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+
+<section class="trust-section">
+  <div class="trust-inner">
+    <h2 class="section-title centered">Kenapa GottaBuyEmAll?</h2>
+    <div class="trust-grid">
+      <div class="trust-card">
+        <div class="trust-icon">⬡</div>
+        <h3>Dana Escrow</h3>
+        <p>Pembayaran kamu ditahan aman sampai kartu tiba dan kamu konfirmasi. Seller baru dapat dana setelah itu.</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">◈</div>
+        <h3>Seller Terverifikasi</h3>
+        <p>Setiap seller punya rating dan riwayat transaksi yang transparan. Kamu bisa lihat track record sebelum beli.</p>
+      </div>
+      <div class="trust-card">
+        <div class="trust-icon">○</div>
+        <h3>Dispute Protection</h3>
+        <p>Ada masalah? Tim kami siap bantu resolve. Jika kartu tidak sesuai, kamu bisa ajukan dispute untuk refund.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
 {% endblock %}

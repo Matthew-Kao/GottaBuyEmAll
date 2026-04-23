@@ -27,6 +27,7 @@
             placeholder="Cari kartu, set, atau seller..."
             class="search-input"
             id="searchInput"
+            value="{{ q if q is defined and q else '' }}"
           />
           <button class="search-btn" onclick="handleSearch()">
             <svg

@@ -1,99 +1,54 @@
-{% extends "shell.html" %} {% block title %}Jual Kartu — GottaBuyEmAll{%
-endblock %} {% block content %}
+{% extends "shell.html" %}
+
+{% block title %}Jual Kartu — GottaBuyEmAll{% endblock %}
+
+{% block content %}
 <div class="sell-wrap">
   <div class="sell-header">
     <a href="/" class="auth-back">✕</a>
     <div>
       <h1 class="sell-title">Jual Kartu</h1>
-      <p class="sell-sub">
-        Cari kartu yang mau kamu jual, upload foto, dan set harga.
-      </p>
+      <p class="sell-sub">Cari kartu yang mau kamu jual, upload foto, dan set harga.</p>
     </div>
   </div>
 
-  <form
-    method="POST"
-    action="/sell"
-    enctype="multipart/form-data"
-    class="sell-form"
-    id="sellForm"
-  >
+  <form method="POST" action="/sell" enctype="multipart/form-data" class="sell-form" id="sellForm">
+
     <div class="sell-section">
       <h2 class="sell-section-title">1. Cari kartu</h2>
 
       <div class="card-search-wrap" id="cardSearchWrap">
-        <input
-          type="text"
-          id="cardSearchInput"
-          class="field-input"
-          placeholder="Ketik nama kartu... (contoh: Pikachu, Charizard)"
-          autocomplete="off"
-        />
+        <input type="text" id="cardSearchInput" class="field-input" placeholder="Ketik nama kartu... (contoh: Pikachu, Charizard)" autocomplete="off" />
         <div class="card-search-results" id="cardSearchResults"></div>
       </div>
 
-      <div
-        class="selected-card-preview"
-        id="selectedCardPreview"
-        style="display: none"
-      >
+      <div class="selected-card-preview" id="selectedCardPreview" style="display:none;">
         <img id="selectedCardImg" src="" alt="" class="selected-card-img" />
         <div class="selected-card-info">
           <div class="selected-card-name" id="selectedCardName"></div>
           <div class="selected-card-set" id="selectedCardSet"></div>
           <div class="selected-card-rarity" id="selectedCardRarity"></div>
-          <button
-            type="button"
-            class="btn btn-ghost btn-sm"
-            onclick="clearSelectedCard()"
-          >
-            Ganti kartu
-          </button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="clearSelectedCard()">Ganti kartu</button>
         </div>
       </div>
 
-      <div
-        class="manual-entry-section"
-        id="manualEntrySection"
-        style="display: none"
-      >
+      <div class="manual-entry-section" id="manualEntrySection" style="display:none;">
         <div class="manual-entry-header">
           <span>Isi data kartu secara manual</span>
-          <button
-            type="button"
-            class="btn btn-ghost btn-sm"
-            onclick="cancelManual()"
-          >
-            Batal
-          </button>
+          <button type="button" class="btn btn-ghost btn-sm" onclick="cancelManual()">Batal</button>
         </div>
-        <div class="sell-fields" style="margin-top: 16px">
+        <div class="sell-fields" style="margin-top:16px;">
           <div class="field-group">
             <label class="field-label">Nama kartu</label>
-            <input
-              type="text"
-              id="manualCardName"
-              class="field-input"
-              placeholder="Contoh: Pikachu VMAX"
-            />
+            <input type="text" id="manualCardName" class="field-input" placeholder="Contoh: Pikachu VMAX" />
           </div>
           <div class="field-group">
             <label class="field-label">Nama set</label>
-            <input
-              type="text"
-              id="manualCardSet"
-              class="field-input"
-              placeholder="Contoh: Vivid Voltage"
-            />
+            <input type="text" id="manualCardSet" class="field-input" placeholder="Contoh: Vivid Voltage" />
           </div>
           <div class="field-group">
             <label class="field-label">Nomor kartu</label>
-            <input
-              type="text"
-              id="manualCardNumber"
-              class="field-input"
-              placeholder="Contoh: 044/185"
-            />
+            <input type="text" id="manualCardNumber" class="field-input" placeholder="Contoh: 044/185" />
           </div>
           <div class="field-group">
             <label class="field-label">Rarity</label>
@@ -106,44 +61,26 @@ endblock %} {% block content %}
             </select>
           </div>
         </div>
-        <button
-          type="button"
-          class="btn btn-primary btn-sm"
-          style="margin-top: 16px"
-          onclick="confirmManual()"
-        >
-          Pakai data ini
-        </button>
+        <button type="button" class="btn btn-primary btn-sm" style="margin-top:16px" onclick="confirmManual()">Pakai data ini</button>
       </div>
 
       <input type="hidden" name="card_api_id" id="cardApiId" />
       <input type="hidden" name="card_name" id="cardName" />
+      <input type="hidden" name="card_full_name" id="cardFullName" />
       <input type="hidden" name="card_set" id="cardSet" />
       <input type="hidden" name="card_number" id="cardNumber" />
       <input type="hidden" name="card_rarity" id="cardRarity" />
-      <input
-        type="hidden"
-        name="card_variant"
-        id="cardVariant"
-        value="normal"
-      />
+      <input type="hidden" name="card_variant" id="cardVariant" value="normal" />
       <input type="hidden" name="card_image_large" id="cardImageLarge" />
       <input type="hidden" name="pokemon_name" id="pokemonName" />
     </div>
 
     <div class="sell-section">
       <h2 class="sell-section-title">2. Foto kartu kamu</h2>
-      <p class="sell-section-sub">
-        Upload foto kartu asli kamu (bukan dari internet). Maks 3 foto.
-      </p>
+      <p class="sell-section-sub">Upload foto kartu asli kamu (bukan dari internet). Maks 3 foto.</p>
       <div class="photo-upload-grid">
         <label class="photo-slot" id="slot1">
-          <input
-            type="file"
-            name="photo1"
-            accept="image/*"
-            onchange="previewPhoto(this, 'slot1')"
-          />
+          <input type="file" name="photo1" accept="image/*" onchange="previewPhoto(this, 'slot1')" />
           <div class="photo-slot-inner">
             <span class="photo-slot-icon">+</span>
             <span class="photo-slot-label">Foto utama</span>
@@ -151,12 +88,7 @@ endblock %} {% block content %}
           <img class="photo-preview" id="preview1" />
         </label>
         <label class="photo-slot" id="slot2">
-          <input
-            type="file"
-            name="photo2"
-            accept="image/*"
-            onchange="previewPhoto(this, 'slot2')"
-          />
+          <input type="file" name="photo2" accept="image/*" onchange="previewPhoto(this, 'slot2')" />
           <div class="photo-slot-inner">
             <span class="photo-slot-icon">+</span>
             <span class="photo-slot-label">Foto 2</span>
@@ -164,12 +96,7 @@ endblock %} {% block content %}
           <img class="photo-preview" id="preview2" />
         </label>
         <label class="photo-slot" id="slot3">
-          <input
-            type="file"
-            name="photo3"
-            accept="image/*"
-            onchange="previewPhoto(this, 'slot3')"
-          />
+          <input type="file" name="photo3" accept="image/*" onchange="previewPhoto(this, 'slot3')" />
           <div class="photo-slot-inner">
             <span class="photo-slot-icon">+</span>
             <span class="photo-slot-label">Foto 3</span>
@@ -193,24 +120,11 @@ endblock %} {% block content %}
         </div>
         <div class="field-group">
           <label class="field-label">Harga (Rp)</label>
-          <input
-            type="number"
-            name="price"
-            class="field-input"
-            placeholder="500000"
-            min="1000"
-            required
-          />
+          <input type="number" name="price" class="field-input" placeholder="500000" min="1000" required />
         </div>
         <div class="field-group field-group--full">
-          <label class="field-label"
-            >Deskripsi <span class="field-optional">opsional</span></label
-          >
-          <textarea
-            name="description"
-            class="field-input field-textarea"
-            placeholder="Ceritain kondisi kartu, packaging, dll..."
-          ></textarea>
+          <label class="field-label">Deskripsi <span class="field-optional">opsional</span></label>
+          <textarea name="description" class="field-input field-textarea" placeholder="Ceritain kondisi kartu, packaging, dll..."></textarea>
         </div>
         <div class="field-group field-group--full">
           <label class="field-label field-checkbox-label">
@@ -222,21 +136,12 @@ endblock %} {% block content %}
     </div>
 
     <div class="sell-section">
-      <h2 class="sell-section-title">
-        4. Grading <span class="sell-optional-badge">opsional</span>
-      </h2>
-      <p class="sell-section-sub">
-        Kalau kartu kamu sudah di-grade oleh PSA, BGS, CGC, dll.
-      </p>
+      <h2 class="sell-section-title">4. Grading <span class="sell-optional-badge">opsional</span></h2>
+      <p class="sell-section-sub">Kalau kartu kamu sudah di-grade oleh PSA, BGS, CGC, dll.</p>
       <div class="sell-fields">
         <div class="field-group">
           <label class="field-label">Grading service</label>
-          <select
-            name="grading_service"
-            class="field-input"
-            id="gradingService"
-            onchange="toggleGrading()"
-          >
+          <select name="grading_service" class="field-input" id="gradingService" onchange="toggleGrading()">
             <option value="">Tidak ada grading</option>
             <option value="PSA">PSA</option>
             <option value="BGS">BGS (Beckett)</option>
@@ -246,270 +151,243 @@ endblock %} {% block content %}
             <option value="TAG">TAG</option>
           </select>
         </div>
-        <div class="field-group" id="gradeField" style="display: none">
+        <div class="field-group" id="gradeField" style="display:none;">
           <label class="field-label">Grade</label>
-          <input
-            type="number"
-            name="grade"
-            class="field-input"
-            placeholder="9.5"
-            min="1"
-            max="10"
-            step="0.5"
-          />
+          <input type="number" name="grade" class="field-input" placeholder="9.5" min="1" max="10" step="0.5" />
         </div>
-        <div class="field-group" id="certField" style="display: none">
+        <div class="field-group" id="certField" style="display:none;">
           <label class="field-label">Cert number</label>
-          <input
-            type="text"
-            name="cert_number"
-            class="field-input"
-            placeholder="PSA-12345678"
-          />
+          <input type="text" name="cert_number" class="field-input" placeholder="PSA-12345678" />
         </div>
       </div>
     </div>
 
     <div class="sell-submit">
-      <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">
-        Listing Sekarang
-      </button>
+      <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">Listing Sekarang</button>
       <a href="/" class="btn btn-ghost btn-lg">Batal</a>
     </div>
+
   </form>
 </div>
-{% endblock %} {% block extra_scripts %}
+{% endblock %}
+
+{% block extra_scripts %}
 <script>
-  let searchTimeout = null;
-  let currentQuery = "";
-  let currentPage = 1;
-  let isLoading = false;
-  let hasMore = true;
+let searchTimeout = null
+let currentQuery = ''
+let currentPage = 1
+let isLoading = false
+let hasMore = true
 
-  const cardSearchInput = document.getElementById("cardSearchInput");
-  const cardSearchResults = document.getElementById("cardSearchResults");
-  const selectedCardPreview = document.getElementById("selectedCardPreview");
+const cardSearchInput = document.getElementById('cardSearchInput')
+const cardSearchResults = document.getElementById('cardSearchResults')
+const selectedCardPreview = document.getElementById('selectedCardPreview')
 
-  cardSearchInput.addEventListener("input", () => {
-    clearTimeout(searchTimeout);
-    const q = cardSearchInput.value.trim();
-    if (q.length < 2) {
-      cardSearchResults.innerHTML = "";
-      cardSearchResults.style.display = "none";
-      return;
-    }
-    searchTimeout = setTimeout(() => {
-      currentQuery = q;
-      currentPage = 1;
-      hasMore = true;
-      cardSearchResults.innerHTML = "";
-      searchCards(q, 1, false);
-    }, 350);
-  });
+cardSearchInput.addEventListener('input', () => {
+  clearTimeout(searchTimeout)
+  const q = cardSearchInput.value.trim()
+  if (q.length < 2) {
+    cardSearchResults.innerHTML = ''
+    cardSearchResults.style.display = 'none'
+    return
+  }
+  searchTimeout = setTimeout(() => {
+    currentQuery = q
+    currentPage = 1
+    hasMore = true
+    cardSearchResults.innerHTML = ''
+    searchCards(q, 1, false)
+  }, 350)
+})
 
-  async function searchCards(q, page, append) {
-    if (isLoading) return;
-    isLoading = true;
+async function searchCards(q, page, append) {
+  if (isLoading) return
+  isLoading = true
 
-    if (!append) {
-      cardSearchResults.innerHTML =
-        '<div class="card-search-loading">Mencari...</div>';
-      cardSearchResults.style.display = "block";
-    } else {
-      const loader = document.createElement("div");
-      loader.className = "card-search-loading";
-      loader.id = "infiniteLoader";
-      loader.textContent = "Memuat lebih banyak...";
-      cardSearchResults.appendChild(loader);
-    }
+  if (!append) {
+    cardSearchResults.innerHTML = '<div class="card-search-loading">Mencari...</div>'
+    cardSearchResults.style.display = 'block'
+  } else {
+    const loader = document.createElement('div')
+    loader.className = 'card-search-loading'
+    loader.id = 'infiniteLoader'
+    loader.textContent = 'Memuat lebih banyak...'
+    cardSearchResults.appendChild(loader)
+  }
 
-    try {
-      const res = await fetch(
-        `/api/cards/search?q=${encodeURIComponent(q)}&page=${page}`,
-      );
-      const cards = await res.json();
+  try {
+    const res = await fetch(`/api/cards/search?q=${encodeURIComponent(q)}&page=${page}`)
+    const cards = await res.json()
 
-      const loader = document.getElementById("infiniteLoader");
-      if (loader) loader.remove();
+    const loader = document.getElementById('infiniteLoader')
+    if (loader) loader.remove()
 
-      if (!append) cardSearchResults.innerHTML = "";
+    if (!append) cardSearchResults.innerHTML = ''
 
-      if (!cards.length && !append) {
-        cardSearchResults.innerHTML = `
+    if (!cards.length && !append) {
+      cardSearchResults.innerHTML = `
         <div class="card-search-empty">Kartu tidak ditemukan di database.</div>
         <div class="card-search-manual-btn" onclick="showManualEntry()">+ Tambah kartu secara manual</div>
-      `;
-        hasMore = false;
-        isLoading = false;
-        return;
-      }
+      `
+      hasMore = false
+      isLoading = false
+      return
+    }
 
-      if (cards.length < 12) hasMore = false;
+    if (cards.length < 12) hasMore = false
 
-      cards.forEach((c) => {
-        const item = document.createElement("div");
-        item.className = "card-search-item";
-        item.innerHTML = `
+    cards.forEach(c => {
+      const item = document.createElement('div')
+      item.className = 'card-search-item'
+      item.innerHTML = `
         <img src="${c.image}" alt="${c.name}" class="card-search-thumb" />
         <div class="card-search-item-info">
           <div class="card-search-item-name">${c.name}</div>
           <div class="card-search-item-set">${c.set} · ${c.rarity}</div>
         </div>
-      `;
-        item.addEventListener("click", () => selectCard(c));
-        cardSearchResults.appendChild(item);
-      });
+      `
+      item.addEventListener('click', () => selectCard(c))
+      cardSearchResults.appendChild(item)
+    })
 
-      if (hasMore) {
-        const sentinel = document.createElement("div");
-        sentinel.id = "scrollSentinel";
-        sentinel.style.height = "1px";
-        cardSearchResults.appendChild(sentinel);
+    if (hasMore) {
+      const sentinel = document.createElement('div')
+      sentinel.id = 'scrollSentinel'
+      sentinel.style.height = '1px'
+      cardSearchResults.appendChild(sentinel)
 
-        const obs = new IntersectionObserver(
-          (entries) => {
-            if (entries[0].isIntersecting && hasMore && !isLoading) {
-              obs.disconnect();
-              currentPage++;
-              searchCards(currentQuery, currentPage, true);
-            }
-          },
-          { root: cardSearchResults, threshold: 1.0 },
-        );
-        obs.observe(sentinel);
-      } else {
-        const manualBtn = document.createElement("div");
-        manualBtn.className = "card-search-manual-btn";
-        manualBtn.textContent = "+ Kartu tidak ada di sini? Tambah manual";
-        manualBtn.onclick = showManualEntry;
-        cardSearchResults.appendChild(manualBtn);
-      }
-    } catch {
-      cardSearchResults.innerHTML =
-        '<div class="card-search-empty">Gagal mencari kartu.</div>';
-    }
-
-    isLoading = false;
-  }
-
-  function selectCard(card) {
-    document.getElementById("cardApiId").value = card.id;
-    document.getElementById("cardName").value = card.name;
-    document.getElementById("cardSet").value = card.set;
-    document.getElementById("cardNumber").value = card.number;
-    document.getElementById("cardRarity").value = card.rarity;
-    document.getElementById("cardImageLarge").value = card.image_large;
-    document.getElementById("pokemonName").value = card.name.split(" ")[0];
-
-    document.getElementById("selectedCardImg").src =
-      card.image_large || card.image;
-    document.getElementById("selectedCardImg").style.display = "block";
-    document.getElementById("selectedCardName").textContent = card.name;
-    document.getElementById("selectedCardSet").textContent = card.set;
-    document.getElementById("selectedCardRarity").textContent = card.rarity;
-
-    selectedCardPreview.style.display = "flex";
-    document.getElementById("cardSearchWrap").style.display = "none";
-    document.getElementById("manualEntrySection").style.display = "none";
-  }
-
-  function clearSelectedCard() {
-    document.getElementById("cardApiId").value = "";
-    document.getElementById("cardName").value = "";
-    cardSearchInput.value = "";
-    cardSearchResults.innerHTML = "";
-    cardSearchResults.style.display = "none";
-    document.getElementById("cardSearchWrap").style.display = "block";
-    selectedCardPreview.style.display = "none";
-  }
-
-  function showManualEntry() {
-    document.getElementById("manualEntrySection").style.display = "block";
-    cardSearchResults.style.display = "none";
-    cardSearchInput.style.display = "none";
-  }
-
-  function cancelManual() {
-    document.getElementById("manualEntrySection").style.display = "none";
-    cardSearchInput.style.display = "block";
-    cardSearchInput.value = "";
-    cardSearchResults.innerHTML = "";
-  }
-
-  function confirmManual() {
-    const name = document.getElementById("manualCardName").value.trim();
-    const set = document.getElementById("manualCardSet").value.trim();
-    const number = document.getElementById("manualCardNumber").value.trim();
-    const rarity = document.getElementById("manualCardRarity").value;
-
-    if (!name) {
-      alert("Nama kartu wajib diisi");
-      return;
-    }
-    if (!set) {
-      alert("Nama set wajib diisi");
-      return;
-    }
-
-    document.getElementById("cardApiId").value = `manual-${Date.now()}`;
-    document.getElementById("cardName").value = name;
-    document.getElementById("cardSet").value = set;
-    document.getElementById("cardNumber").value = number;
-    document.getElementById("cardRarity").value = rarity;
-    document.getElementById("cardImageLarge").value = "";
-    document.getElementById("pokemonName").value = name.split(" ")[0];
-
-    document.getElementById("selectedCardImg").style.display = "none";
-    document.getElementById("selectedCardName").textContent = name;
-    document.getElementById("selectedCardSet").textContent = set;
-    document.getElementById("selectedCardRarity").textContent = rarity;
-
-    selectedCardPreview.style.display = "flex";
-    document.getElementById("manualEntrySection").style.display = "none";
-    document.getElementById("cardSearchWrap").style.display = "none";
-  }
-
-  function previewPhoto(input, slotId) {
-    const file = input.files[0];
-    if (!file) return;
-    const slotNum = slotId.replace("slot", "");
-    const preview = document.getElementById(`preview${slotNum}`);
-    const slot = document.getElementById(slotId);
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      preview.src = e.target.result;
-      preview.style.display = "block";
-      slot.classList.add("has-photo");
-    };
-    reader.readAsDataURL(file);
-  }
-
-  function toggleGrading() {
-    const service = document.getElementById("gradingService").value;
-    const show = !!service;
-    document.getElementById("gradeField").style.display = show
-      ? "block"
-      : "none";
-    document.getElementById("certField").style.display = show
-      ? "block"
-      : "none";
-    if (show) {
-      document.getElementById("conditionField").disabled = true;
+      const obs = new IntersectionObserver(entries => {
+        if (entries[0].isIntersecting && hasMore && !isLoading) {
+          obs.disconnect()
+          currentPage++
+          searchCards(currentQuery, currentPage, true)
+        }
+      }, { root: null, threshold: 0.1 })
+      obs.observe(sentinel)
     } else {
-      document.getElementById("conditionField").disabled = false;
-      document.getElementById("conditionField").value = "near_mint";
+      const manualBtn = document.createElement('div')
+      manualBtn.className = 'card-search-manual-btn'
+      manualBtn.textContent = '+ Kartu tidak ada di sini? Tambah manual'
+      manualBtn.onclick = showManualEntry
+      cardSearchResults.appendChild(manualBtn)
     }
+  } catch {
+    cardSearchResults.innerHTML = '<div class="card-search-empty">Gagal mencari kartu.</div>'
   }
 
-  document.getElementById("sellForm").addEventListener("submit", (e) => {
-    if (!document.getElementById("cardApiId").value) {
-      e.preventDefault();
-      alert("Pilih atau tambah kartu dulu sebelum submit!");
-      return;
-    }
-    const btn = document.getElementById("submitBtn");
-    btn.textContent = "Uploading...";
-    btn.disabled = true;
-  });
+  isLoading = false
+}
+
+function selectCard(card) {
+  document.getElementById('cardApiId').value = card.id
+  document.getElementById('cardName').value = card.name
+  document.getElementById('cardFullName').value = card.name
+  document.getElementById('cardSet').value = card.set
+  document.getElementById('cardNumber').value = card.number
+  document.getElementById('cardRarity').value = card.rarity
+  document.getElementById('cardImageLarge').value = card.image_large
+  document.getElementById('pokemonName').value = card.name.split(' ')[0]
+
+  document.getElementById('selectedCardImg').src = card.image_large || card.image
+  document.getElementById('selectedCardImg').style.display = 'block'
+  document.getElementById('selectedCardName').textContent = card.name
+  document.getElementById('selectedCardSet').textContent = card.set
+  document.getElementById('selectedCardRarity').textContent = card.rarity
+
+  selectedCardPreview.style.display = 'flex'
+  document.getElementById('cardSearchWrap').style.display = 'none'
+  document.getElementById('manualEntrySection').style.display = 'none'
+}
+
+function clearSelectedCard() {
+  document.getElementById('cardApiId').value = ''
+  document.getElementById('cardName').value = ''
+  document.getElementById('cardFullName').value = ''
+  cardSearchInput.value = ''
+  cardSearchResults.innerHTML = ''
+  cardSearchResults.style.display = 'none'
+  document.getElementById('cardSearchWrap').style.display = 'block'
+  selectedCardPreview.style.display = 'none'
+}
+
+function showManualEntry() {
+  document.getElementById('manualEntrySection').style.display = 'block'
+  cardSearchResults.style.display = 'none'
+  cardSearchInput.style.display = 'none'
+}
+
+function cancelManual() {
+  document.getElementById('manualEntrySection').style.display = 'none'
+  cardSearchInput.style.display = 'block'
+  cardSearchInput.value = ''
+  cardSearchResults.innerHTML = ''
+}
+
+function confirmManual() {
+  const name = document.getElementById('manualCardName').value.trim()
+  const set = document.getElementById('manualCardSet').value.trim()
+  const number = document.getElementById('manualCardNumber').value.trim()
+  const rarity = document.getElementById('manualCardRarity').value
+
+  if (!name) { alert('Nama kartu wajib diisi'); return }
+  if (!set) { alert('Nama set wajib diisi'); return }
+
+  document.getElementById('cardApiId').value = `manual-${Date.now()}`
+  document.getElementById('cardName').value = name
+  document.getElementById('cardFullName').value = name
+  document.getElementById('cardSet').value = set
+  document.getElementById('cardNumber').value = number
+  document.getElementById('cardRarity').value = rarity
+  document.getElementById('cardImageLarge').value = ''
+  document.getElementById('pokemonName').value = name.split(' ')[0]
+
+  document.getElementById('selectedCardImg').style.display = 'none'
+  document.getElementById('selectedCardName').textContent = name
+  document.getElementById('selectedCardSet').textContent = set
+  document.getElementById('selectedCardRarity').textContent = rarity
+
+  selectedCardPreview.style.display = 'flex'
+  document.getElementById('manualEntrySection').style.display = 'none'
+  document.getElementById('cardSearchWrap').style.display = 'none'
+}
+
+function previewPhoto(input, slotId) {
+  const file = input.files[0]
+  if (!file) return
+  const slotNum = slotId.replace('slot', '')
+  const preview = document.getElementById(`preview${slotNum}`)
+  const slot = document.getElementById(slotId)
+  const reader = new FileReader()
+  reader.onload = e => {
+    preview.src = e.target.result
+    preview.style.display = 'block'
+    slot.classList.add('has-photo')
+  }
+  reader.readAsDataURL(file)
+}
+
+function toggleGrading() {
+  const service = document.getElementById('gradingService').value
+  const show = !!service
+  document.getElementById('gradeField').style.display = show ? 'block' : 'none'
+  document.getElementById('certField').style.display = show ? 'block' : 'none'
+  if (show) {
+    document.getElementById('conditionField').disabled = true
+  } else {
+    document.getElementById('conditionField').disabled = false
+    document.getElementById('conditionField').value = 'near_mint'
+  }
+}
+
+document.getElementById('sellForm').addEventListener('submit', e => {
+  if (!document.getElementById('cardApiId').value) {
+    e.preventDefault()
+    alert('Pilih atau tambah kartu dulu sebelum submit!')
+    return
+  }
+  const btn = document.getElementById('submitBtn')
+  btn.textContent = 'Uploading...'
+  btn.disabled = true
+})
 </script>
 {% endblock %}

@@ -74,6 +74,7 @@ async def homepage(
                 or_(
                     Pokemon.name.ilike(pattern),
                     Card.set_name.ilike(pattern),
+                    Card.card_name.ilike(pattern),
                     Card.card_variant.ilike(pattern),
                     User.username.ilike(pattern),
                 )

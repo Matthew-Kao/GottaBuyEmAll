@@ -34,55 +34,55 @@ POKEMON_DATA = [
 ]
 
 CARDS_DATA = [
-    {"pokemon": "Charizard", "set_name": "Champions Path",   "set_code": "CPA",  "card_number": "074/073", "rarity": "secret_rare", "card_variant": "rainbow",  "api_id": "swsh35-74"},
-    {"pokemon": "Charizard", "set_name": "Darkness Ablaze",  "set_code": "DAA",  "card_number": "020/189", "rarity": "ultra_rare",  "card_variant": "full_art", "api_id": "swsh3-20"},
-    {"pokemon": "Charizard", "set_name": "Base Set",         "set_code": "BS",   "card_number": "4/102",   "rarity": "rare",        "card_variant": "holo",     "api_id": "base1-4"},
-    {"pokemon": "Pikachu",   "set_name": "Vivid Voltage",    "set_code": "VIV",  "card_number": "043/185", "rarity": "rare",        "card_variant": "holo",     "api_id": "swsh4-43"},
-    {"pokemon": "Pikachu",   "set_name": "Base Set",         "set_code": "BS",   "card_number": "58/102",  "rarity": "common",      "card_variant": "normal",   "api_id": "base1-58"},
-    {"pokemon": "Eevee",     "set_name": "Fusion Strike",    "set_code": "FST",  "card_number": "130/264", "rarity": "uncommon",    "card_variant": "normal",   "api_id": "swsh8-130"},
-    {"pokemon": "Eevee",     "set_name": "Evolving Skies",   "set_code": "EVS",  "card_number": "128/203", "rarity": "rare",        "card_variant": "holo",     "api_id": "swsh7-128"},
-    {"pokemon": "Snorlax",   "set_name": "Vivid Voltage",    "set_code": "VIV",  "card_number": "131/185", "rarity": "rare",        "card_variant": "holo",     "api_id": "swsh4-131"},
-    {"pokemon": "Snorlax",   "set_name": "Base Set",         "set_code": "BS",   "card_number": "11/102",  "rarity": "rare",        "card_variant": "holo",     "api_id": "base1-11"},
-    {"pokemon": "Mewtwo",    "set_name": "Next Destinies",   "set_code": "NXD",  "card_number": "54/99",   "rarity": "ultra_rare",  "card_variant": "full_art", "api_id": "bw4-54"},
-    {"pokemon": "Mewtwo",    "set_name": "Base Set",         "set_code": "BS",   "card_number": "10/102",  "rarity": "rare",        "card_variant": "holo",     "api_id": "base1-10"},
-    {"pokemon": "Espeon",    "set_name": "Evolving Skies",   "set_code": "EVS",  "card_number": "065/203", "rarity": "ultra_rare",  "card_variant": "alt_art",  "api_id": "swsh7-65"},
-    {"pokemon": "Umbreon",   "set_name": "Evolving Skies",   "set_code": "EVS",  "card_number": "215/203", "rarity": "secret_rare", "card_variant": "alt_art",  "api_id": "swsh7-215"},
-    {"pokemon": "Umbreon",   "set_name": "Evolving Skies",   "set_code": "EVS",  "card_number": "095/203", "rarity": "ultra_rare",  "card_variant": "full_art", "api_id": "swsh7-95"},
-    {"pokemon": "Lugia",     "set_name": "Silver Tempest",   "set_code": "SIT",  "card_number": "186/195", "rarity": "secret_rare", "card_variant": "alt_art",  "api_id": "swsh12-186"},
-    {"pokemon": "Lugia",     "set_name": "Neo Genesis",      "set_code": "N1",   "card_number": "9/111",   "rarity": "rare",        "card_variant": "holo",     "api_id": "neo1-9"},
-    {"pokemon": "Rayquaza",  "set_name": "Evolving Skies",   "set_code": "EVS",  "card_number": "218/203", "rarity": "secret_rare", "card_variant": "alt_art",  "api_id": "swsh7-218"},
-    {"pokemon": "Rayquaza",  "set_name": "Celestial Storm",  "set_code": "CES",  "card_number": "109/168", "rarity": "ultra_rare",  "card_variant": "full_art", "api_id": "sm7-109"},
-    {"pokemon": "Mew",       "set_name": "Fusion Strike",    "set_code": "FST",  "card_number": "269/264", "rarity": "secret_rare", "card_variant": "rainbow",  "api_id": "swsh8-269"},
-    {"pokemon": "Mew",       "set_name": "Fusion Strike",    "set_code": "FST",  "card_number": "114/264", "rarity": "ultra_rare",  "card_variant": "full_art", "api_id": "swsh8-114"},
-    {"pokemon": "Gengar",    "set_name": "Fusion Strike",    "set_code": "FST",  "card_number": "157/264", "rarity": "ultra_rare",  "card_variant": "full_art", "api_id": "swsh8-157"},
-    {"pokemon": "Gengar",    "set_name": "Base Set",         "set_code": "BS",   "card_number": "5/102",   "rarity": "rare",        "card_variant": "holo",     "api_id": "base1-5"},
-    {"pokemon": "Gyarados",  "set_name": "Base Set",         "set_code": "BS",   "card_number": "6/102",   "rarity": "rare",        "card_variant": "holo",     "api_id": "base1-6"},
-    {"pokemon": "Garchomp",  "set_name": "Astral Radiance",  "set_code": "ASR",  "card_number": "118/189", "rarity": "ultra_rare",  "card_variant": "full_art", "api_id": "swsh10-118"},
-    {"pokemon": "Lucario",   "set_name": "Brilliant Stars",  "set_code": "BRS",  "card_number": "078/172", "rarity": "ultra_rare",  "card_variant": "alt_art",  "api_id": "swsh9-78"},
-    {"pokemon": "Gardevoir", "set_name": "Scarlet & Violet", "set_code": "SVI",  "card_number": "086/198", "rarity": "ultra_rare",  "card_variant": "full_art", "api_id": "sv1-86"},
+    {"pokemon": "Charizard", "card_name": "Charizard VMAX",        "set_name": "Champions Path",   "set_code": "swsh35-74",  "card_number": "074/073", "rarity": "secret_rare", "card_variant": "rainbow",  "api_id": "swsh35-74"},
+    {"pokemon": "Charizard", "card_name": "Charizard VMAX",        "set_name": "Darkness Ablaze",  "set_code": "swsh3-20",   "card_number": "020/189", "rarity": "ultra_rare",  "card_variant": "full_art", "api_id": "swsh3-20"},
+    {"pokemon": "Charizard", "card_name": "Charizard",             "set_name": "Base Set",         "set_code": "base1-4",    "card_number": "4/102",   "rarity": "rare",        "card_variant": "holo",     "api_id": "base1-4"},
+    {"pokemon": "Pikachu",   "card_name": "Pikachu",               "set_name": "Vivid Voltage",    "set_code": "swsh4-43",   "card_number": "043/185", "rarity": "rare",        "card_variant": "holo",     "api_id": "swsh4-43"},
+    {"pokemon": "Pikachu",   "card_name": "Pikachu",               "set_name": "Base Set",         "set_code": "base1-58",   "card_number": "58/102",  "rarity": "common",      "card_variant": "normal",   "api_id": "base1-58"},
+    {"pokemon": "Eevee",     "card_name": "Eevee",                 "set_name": "Fusion Strike",    "set_code": "swsh8-130",  "card_number": "130/264", "rarity": "uncommon",    "card_variant": "normal",   "api_id": "swsh8-130"},
+    {"pokemon": "Eevee",     "card_name": "Eevee",                 "set_name": "Evolving Skies",   "set_code": "swsh7-128",  "card_number": "128/203", "rarity": "rare",        "card_variant": "holo",     "api_id": "swsh7-128"},
+    {"pokemon": "Snorlax",   "card_name": "Snorlax",               "set_name": "Vivid Voltage",    "set_code": "swsh4-131",  "card_number": "131/185", "rarity": "rare",        "card_variant": "holo",     "api_id": "swsh4-131"},
+    {"pokemon": "Snorlax",   "card_name": "Snorlax",               "set_name": "Base Set",         "set_code": "base1-11",   "card_number": "11/102",  "rarity": "rare",        "card_variant": "holo",     "api_id": "base1-11"},
+    {"pokemon": "Mewtwo",    "card_name": "Mewtwo EX",             "set_name": "Next Destinies",   "set_code": "bw4-54",     "card_number": "54/99",   "rarity": "ultra_rare",  "card_variant": "full_art", "api_id": "bw4-54"},
+    {"pokemon": "Mewtwo",    "card_name": "Mewtwo",                "set_name": "Base Set",         "set_code": "base1-10",   "card_number": "10/102",  "rarity": "rare",        "card_variant": "holo",     "api_id": "base1-10"},
+    {"pokemon": "Espeon",    "card_name": "Espeon VMAX",           "set_name": "Evolving Skies",   "set_code": "swsh7-65",   "card_number": "065/203", "rarity": "ultra_rare",  "card_variant": "alt_art",  "api_id": "swsh7-65"},
+    {"pokemon": "Umbreon",   "card_name": "Umbreon VMAX",          "set_name": "Evolving Skies",   "set_code": "swsh7-215",  "card_number": "215/203", "rarity": "secret_rare", "card_variant": "alt_art",  "api_id": "swsh7-215"},
+    {"pokemon": "Umbreon",   "card_name": "Umbreon VMAX",          "set_name": "Evolving Skies",   "set_code": "swsh7-95",   "card_number": "095/203", "rarity": "ultra_rare",  "card_variant": "full_art", "api_id": "swsh7-95"},
+    {"pokemon": "Lugia",     "card_name": "Lugia V",               "set_name": "Silver Tempest",   "set_code": "swsh12-186", "card_number": "186/195", "rarity": "secret_rare", "card_variant": "alt_art",  "api_id": "swsh12-186"},
+    {"pokemon": "Lugia",     "card_name": "Lugia",                 "set_name": "Neo Genesis",      "set_code": "neo1-9",     "card_number": "9/111",   "rarity": "rare",        "card_variant": "holo",     "api_id": "neo1-9"},
+    {"pokemon": "Rayquaza",  "card_name": "Rayquaza VMAX",         "set_name": "Evolving Skies",   "set_code": "swsh7-218",  "card_number": "218/203", "rarity": "secret_rare", "card_variant": "alt_art",  "api_id": "swsh7-218"},
+    {"pokemon": "Rayquaza",  "card_name": "Rayquaza GX",           "set_name": "Celestial Storm",  "set_code": "sm7-109",    "card_number": "109/168", "rarity": "ultra_rare",  "card_variant": "full_art", "api_id": "sm7-109"},
+    {"pokemon": "Mew",       "card_name": "Mew VMAX",              "set_name": "Fusion Strike",    "set_code": "swsh8-269",  "card_number": "269/264", "rarity": "secret_rare", "card_variant": "rainbow",  "api_id": "swsh8-269"},
+    {"pokemon": "Mew",       "card_name": "Mew VMAX",              "set_name": "Fusion Strike",    "set_code": "swsh8-114",  "card_number": "114/264", "rarity": "ultra_rare",  "card_variant": "full_art", "api_id": "swsh8-114"},
+    {"pokemon": "Gengar",    "card_name": "Gengar VMAX",           "set_name": "Fusion Strike",    "set_code": "swsh8-157",  "card_number": "157/264", "rarity": "ultra_rare",  "card_variant": "full_art", "api_id": "swsh8-157"},
+    {"pokemon": "Gengar",    "card_name": "Gengar",                "set_name": "Base Set",         "set_code": "base1-5",    "card_number": "5/102",   "rarity": "rare",        "card_variant": "holo",     "api_id": "base1-5"},
+    {"pokemon": "Gyarados",  "card_name": "Gyarados",              "set_name": "Base Set",         "set_code": "base1-6",    "card_number": "6/102",   "rarity": "rare",        "card_variant": "holo",     "api_id": "base1-6"},
+    {"pokemon": "Garchomp",  "card_name": "Garchomp V",            "set_name": "Astral Radiance",  "set_code": "swsh10-118", "card_number": "118/189", "rarity": "ultra_rare",  "card_variant": "full_art", "api_id": "swsh10-118"},
+    {"pokemon": "Lucario",   "card_name": "Lucario V",             "set_name": "Brilliant Stars",  "set_code": "swsh9-78",   "card_number": "078/172", "rarity": "ultra_rare",  "card_variant": "alt_art",  "api_id": "swsh9-78"},
+    {"pokemon": "Gardevoir", "card_name": "Gardevoir ex",          "set_name": "Scarlet & Violet", "set_code": "sv1-86",     "card_number": "086/198", "rarity": "ultra_rare",  "card_variant": "full_art", "api_id": "sv1-86"},
 ]
 
 LISTINGS_DATA = [
     {"seller": "pokéking99",    "card_idx": 0,  "price": 1_500_000,  "condition": "near_mint", "description": "Kondisi near mint, sudah disleeve sejak beli. No scratch."},
     {"seller": "bandungcards",  "card_idx": 3,  "price": 250_000,    "condition": "mint",      "description": "Freshly pulled dari booster pack. Mint banget."},
-    {"seller": "jakartapokemon","card_idx": 12, "price": 3_200_000,  "condition": "mint",      "description": "Umbreon Alt Art EVS, grail card. Mint condition, toploader."},
+    {"seller": "jakartapokemon","card_idx": 12, "price": 3_200_000,  "condition": "mint",      "description": "Umbreon VMAX Alt Art EVS, grail card. Mint condition, toploader."},
     {"seller": "surabayadeck",  "card_idx": 9,  "price": 450_000,    "condition": "played",    "description": "Ada sedikit scratches di corner tapi masih oke buat played."},
-    {"seller": "legendscards",  "card_idx": 16, "price": 2_800_000,  "condition": "mint",      "description": "Rayquaza Alt Art, one of the most beautiful cards ever printed."},
+    {"seller": "legendscards",  "card_idx": 16, "price": 2_800_000,  "condition": "mint",      "description": "Rayquaza VMAX Alt Art, one of the most beautiful cards ever printed."},
     {"seller": "bandungcards",  "card_idx": 5,  "price": 180_000,    "condition": "near_mint", "description": "Eevee Fusion Strike, sudah disleeve. Kondisi NM."},
-    {"seller": "pokéking99",    "card_idx": 14, "price": 950_000,    "condition": "mint",      "description": "Lugia Alt Art Silver Tempest. Sangat dicari, stok terbatas."},
+    {"seller": "pokéking99",    "card_idx": 14, "price": 950_000,    "condition": "mint",      "description": "Lugia V Alt Art Silver Tempest. Sangat dicari, stok terbatas."},
     {"seller": "surabayadeck",  "card_idx": 19, "price": 600_000,    "condition": "near_mint", "description": "Mew VMAX Full Art. NM condition, stored in binder."},
-    {"seller": "medancards",    "card_idx": 11, "price": 320_000,    "condition": "mint",      "description": "Espeon Alt Art, pulled sendiri. Mint, langsung sleeve."},
-    {"seller": "legendscards",  "card_idx": 18, "price": 1_100_000,  "condition": "mint",      "description": "Mew Secret Rare Rainbow. Foil masih bagus banget."},
+    {"seller": "medancards",    "card_idx": 11, "price": 320_000,    "condition": "mint",      "description": "Espeon VMAX Alt Art, pulled sendiri. Mint, langsung sleeve."},
+    {"seller": "legendscards",  "card_idx": 18, "price": 1_100_000,  "condition": "mint",      "description": "Mew VMAX Secret Rare Rainbow. Foil masih bagus banget."},
     {"seller": "pokéking99",    "card_idx": 1,  "price": 2_200_000,  "condition": "mint",      "description": "Charizard VMAX Full Art Darkness Ablaze. Grail piece."},
-    {"seller": "jakartapokemon","card_idx": 24, "price": 1_400_000,  "condition": "near_mint", "description": "Lucario Alt Art Brilliant Stars. NM, no whitening."},
+    {"seller": "jakartapokemon","card_idx": 24, "price": 1_400_000,  "condition": "near_mint", "description": "Lucario V Alt Art Brilliant Stars. NM, no whitening."},
     {"seller": "bandungcards",  "card_idx": 2,  "price": 8_500_000,  "condition": "near_mint", "description": "Charizard Base Set Shadowless Holo. Legendary card."},
-    {"seller": "medancards",    "card_idx": 16, "price": 3_500_000,  "condition": "mint",      "description": "Rayquaza Secret Rare Alt Art, the crown jewel of EVS."},
+    {"seller": "medancards",    "card_idx": 16, "price": 3_500_000,  "condition": "mint",      "description": "Rayquaza VMAX Secret Rare Alt Art, the crown jewel of EVS."},
     {"seller": "surabayadeck",  "card_idx": 22, "price": 750_000,    "condition": "played",    "description": "Gyarados Base Set Holo. Classic card, played condition tapi mulus."},
     {"seller": "legendscards",  "card_idx": 25, "price": 900_000,    "condition": "mint",      "description": "Gardevoir ex Scarlet & Violet Full Art. Brand new."},
     {"seller": "pokéking99",    "card_idx": 6,  "price": 280_000,    "condition": "mint",      "description": "Eevee EVS Holo. Beautiful art, mint condition."},
-    {"seller": "jakartapokemon","card_idx": 13, "price": 2_800_000,  "condition": "near_mint", "description": "Umbreon VMAX Alt Art Full Art EVS. Iconic card."},
+    {"seller": "jakartapokemon","card_idx": 13, "price": 2_800_000,  "condition": "near_mint", "description": "Umbreon VMAX Full Art EVS. Iconic card."},
     {"seller": "bandungcards",  "card_idx": 4,  "price": 1_200_000,  "condition": "near_mint", "description": "Pikachu Base Set — PSA graded!"},
-    {"seller": "medancards",    "card_idx": 23, "price": 1_600_000,  "condition": "mint",      "description": "Garchomp Full Art Astral Radiance. Mint, pulled sendiri."},
+    {"seller": "medancards",    "card_idx": 23, "price": 1_600_000,  "condition": "mint",      "description": "Garchomp V Full Art Astral Radiance. Mint, pulled sendiri."},
 ]
 
 GRADING_DATA = [
@@ -129,7 +129,7 @@ def run():
 
         for i, data in enumerate(CARDS_DATA):
             api_id = data["api_id"]
-            print(f"  [{i+1}/{len(CARDS_DATA)}] {data['pokemon']} — {api_id}")
+            print(f"  [{i+1}/{len(CARDS_DATA)}] {data['card_name']} — {api_id}")
 
             if api_id not in image_cache:
                 image_cache[api_id] = fetch_card_image(api_id)
@@ -137,8 +137,9 @@ def run():
 
             c = Card(
                 pokemon_id=pokemon_map[data["pokemon"]].id,
+                card_name=data["card_name"],
                 set_name=data["set_name"],
-                set_code=data["set_code"],
+                set_code=data["api_id"],
                 card_number=data["card_number"],
                 rarity=data["rarity"],
                 card_variant=data["card_variant"],

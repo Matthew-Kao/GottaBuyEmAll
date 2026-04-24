@@ -14,6 +14,7 @@ class Card(Base):
     pokemon_id: Mapped[int] = mapped_column(Integer, ForeignKey("pokemon.id"), nullable=False)
 
     set_name: Mapped[str] = mapped_column(String(100), nullable=False)
+    card_name: Mapped[str | None] = mapped_column(String(200), nullable=True)
     set_code: Mapped[str | None] = mapped_column(String(20), nullable=True)   
     card_number: Mapped[str | None] = mapped_column(String(20), nullable=True) 
 

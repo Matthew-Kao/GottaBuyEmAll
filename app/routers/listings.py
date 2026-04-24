@@ -65,6 +65,7 @@ async def create_listing(
     current_user: User = Depends(get_current_user),
     card_api_id: str = Form(default=""),
     card_name: str = Form(default=""),
+    card_full_name: str = Form(default=""),
     card_set: str = Form(default=""),
     card_number: str = Form(default=""),
     card_rarity: str = Form(default="rare"),
@@ -119,6 +120,7 @@ async def create_listing(
     if not card:
         card = Card(
             pokemon_id=pokemon.id,
+            card_name=card_full_name or card_name or None,
             set_name=card_set or "Unknown Set",
             set_code=card_api_id or f"manual-{pokemon.id}",
             card_number=card_number,
@@ -127,6 +129,9 @@ async def create_listing(
         )
         db.add(card)
         db.flush()
+    else:
+        if not card.card_name and (card_full_name or card_name):
+            card.card_name = card_full_name or card_name
 
     image_urls = []
     for photo in [photo1, photo2, photo3]:
@@ -199,6 +204,7 @@ async def listing_detail(
         "images": listing.image_urls.split(",") if listing.image_urls else [],
     })
 
+
 @router.post("/listings/{listing_id}/delete")
 async def delete_listing(
     listing_id: int,
@@ -207,13 +213,13 @@ async def delete_listing(
 ):
     if not current_user:
         return RedirectResponse("/auth/login", status_code=302)
- 
+
     listing = db.query(Listing).filter(Listing.id == listing_id).first()
- 
+
     if not listing or listing.seller_id != current_user.id:
         return RedirectResponse("/", status_code=302)
- 
+
     listing.status = "removed"
     db.commit()
- 
+
     return RedirectResponse("/profile", status_code=302)

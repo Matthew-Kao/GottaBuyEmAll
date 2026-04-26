@@ -2297,3 +2297,10 @@ input {
 .info-cta-section {
   padding: 80px 24px;
 }
+
+.detail-escrow-note {
+  font-size: 13px;
+  color: var(--text-muted);
+  margin-top: 10px;
+  text-align: center;
+}

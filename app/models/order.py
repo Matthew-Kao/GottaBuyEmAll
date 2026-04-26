@@ -19,9 +19,11 @@ class Order(Base):
 
     status: Mapped[str] = mapped_column(
         String(20), nullable=False, default="pending"
-    )  
+    )
 
     payment_ref: Mapped[str | None] = mapped_column(String(100), nullable=True)
+    xendit_invoice_id: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    xendit_invoice_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
 
     tracking_number: Mapped[str | None] = mapped_column(String(100), nullable=True)
     shipping_courier: Mapped[str | None] = mapped_column(String(50), nullable=True)

@@ -1,0 +1,57 @@
+{% extends "shell.html" %}
+
+{% block title %}Pembayaran Berhasil — GottaBuyEmAll{% endblock %}
+
+{% block content %}
+<div class="info-wrap">
+  <div class="info-hero" style="padding: 60px 24px;">
+    <div class="info-hero-inner">
+      <div style="font-size:48px; margin-bottom:16px;">✅</div>
+      <h1 class="info-title">Pembayaran <em>Berhasil!</em></h1>
+      <p class="info-sub">Dana kamu sudah masuk ke escrow dan aman. Seller akan segera mengirim kartu ke alamatmu.</p>
+    </div>
+  </div>
+
+  <div class="info-section">
+    <div class="info-inner" style="max-width:600px;">
+      <div class="detail-grading-box">
+        <div class="grading-row">
+          <span class="grading-label">Order ID</span>
+          <span class="grading-value">#{{ order.id }}</span>
+        </div>
+        <div class="grading-row">
+          <span class="grading-label">Kartu</span>
+          <span class="grading-value">{{ order.listing.card.card_name or order.listing.card.pokemon.name }}</span>
+        </div>
+        <div class="grading-row">
+          <span class="grading-label">Total bayar</span>
+          <span class="grading-value grade-score">Rp {{ "{:,.0f}".format(order.total_price) }}</span>
+        </div>
+        <div class="grading-row">
+          <span class="grading-label">Status</span>
+          <span class="grading-value">
+            <span class="order-status-badge status-{{ order.status }}">{{ order.status.title() }}</span>
+          </span>
+        </div>
+        <div class="grading-row">
+          <span class="grading-label">Seller</span>
+          <span class="grading-value">{{ order.listing.seller.username }}</span>
+        </div>
+      </div>
+
+      <div class="escrow-highlight" style="margin-top:24px;">
+        <div class="escrow-highlight-icon">🔒</div>
+        <div class="escrow-highlight-text">
+          <h3>Dana kamu aman di escrow</h3>
+          <p>Seller akan menerima dana hanya setelah kamu konfirmasi kartu sudah diterima dalam kondisi yang sesuai. Jika ada masalah, kamu bisa buka dispute.</p>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:12px; margin-top:28px; flex-wrap:wrap;">
+        <a href="/profile" class="btn btn-primary btn-lg">Lihat Pesanan Saya</a>
+        <a href="/" class="btn btn-ghost btn-lg">Kembali ke Marketplace</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,5 +1,8 @@
-{% extends "shell.html" %} {% block title %}{{ listing.card.pokemon.name }} —
-GottaBuyEmAll{% endblock %} {% block content %}
+{% extends "shell.html" %}
+
+{% block title %}{{ listing.card.pokemon.name }} — GottaBuyEmAll{% endblock %}
+
+{% block content %}
 <div class="detail-wrap">
   <a href="/" class="detail-back">← Kembali</a>
 
@@ -7,25 +10,16 @@ GottaBuyEmAll{% endblock %} {% block content %}
     <div class="detail-gallery">
       {% if images %}
       <div class="detail-main-img-wrap">
-        <img
-          src="{{ images[0] }}"
-          alt="{{ listing.card.pokemon.name }}"
-          class="detail-main-img"
-          id="mainImg"
-        />
+        <img src="{{ images[0] }}" alt="{{ listing.card.pokemon.name }}" class="detail-main-img" id="mainImg" />
       </div>
       {% if images|length > 1 %}
       <div class="detail-thumbs">
         {% for img in images %}
-        <img
-          src="{{ img }}"
-          alt=""
-          class="detail-thumb {% if loop.first %}active{% endif %}"
-          onclick="switchImage('{{ img }}', this)"
-        />
+        <img src="{{ img }}" alt="" class="detail-thumb {% if loop.first %}active{% endif %}" onclick="switchImage('{{ img }}', this)" />
         {% endfor %}
       </div>
-      {% endif %} {% else %}
+      {% endif %}
+      {% else %}
       <div class="detail-no-img">No Image</div>
       {% endif %}
     </div>
@@ -46,33 +40,32 @@ GottaBuyEmAll{% endblock %} {% block content %}
         {% endif %}
       </div>
 
-      <h1 class="detail-title">{{ listing.card.pokemon.name }}</h1>
+      <h1 class="detail-title">{{ listing.card.card_name or listing.card.pokemon.name }}</h1>
       <div class="detail-set">
-        {{ listing.card.set_name }} {% if listing.card.card_number %} · #{{
-        listing.card.card_number }}{% endif %}
+        {{ listing.card.set_name }}
+        {% if listing.card.card_number %} · #{{ listing.card.card_number }}{% endif %}
       </div>
 
       <div class="detail-price">
-        Rp {{ "{:,.0f}".format(listing.price) }} {% if listing.is_negotiable %}
+        Rp {{ "{:,.0f}".format(listing.price) }}
+        {% if listing.is_negotiable %}
         <span class="nego-badge">Nego</span>
         {% endif %}
       </div>
 
       {% if listing.description %}
       <p class="detail-description">{{ listing.description }}</p>
-      {% endif %} {% if listing.is_graded %}
+      {% endif %}
+
+      {% if listing.is_graded %}
       <div class="detail-grading-box">
         <div class="grading-row">
           <span class="grading-label">Grading service</span>
-          <span class="grading-value"
-            >{{ listing.grading.grading_service }}</span
-          >
+          <span class="grading-value">{{ listing.grading.grading_service }}</span>
         </div>
         <div class="grading-row">
           <span class="grading-label">Grade</span>
-          <span class="grading-value grade-score"
-            >{{ listing.grading.grade }}</span
-          >
+          <span class="grading-value grade-score">{{ listing.grading.grade }}</span>
         </div>
         <div class="grading-row">
           <span class="grading-label">Cert number</span>
@@ -85,60 +78,42 @@ GottaBuyEmAll{% endblock %} {% block content %}
         <div class="detail-seller-left">
           <div class="detail-seller-avatar">
             {% if listing.seller.avatar_url %}
-            <img
-              src="{{ listing.seller.avatar_url }}"
-              style="
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                border-radius: 50%;
-              "
-            />
-            {% else %} {{ listing.seller.username[0].upper() }} {% endif %}
+            <img src="{{ listing.seller.avatar_url }}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />
+            {% else %}
+            {{ listing.seller.username[0].upper() }}
+            {% endif %}
           </div>
           <div>
             <div class="detail-seller-name">{{ listing.seller.username }}</div>
-            <div class="detail-seller-rating">
-              {{ "%.1f"|format(listing.seller.seller_rating) }} ★ · {{
-              listing.seller.total_sales }} terjual
-            </div>
+            <div class="detail-seller-rating">{{ "%.1f"|format(listing.seller.seller_rating) }} ★ · {{ listing.seller.total_sales }} terjual</div>
           </div>
         </div>
       </div>
 
-      {% if listing.card.pokemon.pokedex_number > 0 and
-      listing.card.pokemon.fun_fact and 'trading card' not in
-      listing.card.pokemon.fun_fact %}
+      {% if listing.card.pokemon.pokedex_number > 0 and listing.card.pokemon.fun_fact and 'trading card' not in listing.card.pokemon.fun_fact %}
       <div class="detail-fun-fact">
-        <div class="fun-fact-label">
-          Fun fact tentang {{ listing.card.pokemon.name }}
-        </div>
+        <div class="fun-fact-label">Fun fact tentang {{ listing.card.pokemon.name }}</div>
         <p class="fun-fact-text">{{ listing.card.pokemon.fun_fact }}</p>
       </div>
-      {% endif %} {% if current_user and current_user.id != listing.seller_id
-      and listing.status == 'active' %}
+      {% endif %}
+
+      {% if current_user and current_user.id != listing.seller_id and listing.status == 'active' %}
       <div class="detail-actions">
-        <button class="btn btn-primary btn-lg btn-full">Beli Sekarang</button>
+        <form method="POST" action="/payments/checkout/{{ listing.id }}">
+          <button type="submit" class="btn btn-primary btn-lg btn-full">Beli Sekarang</button>
+        </form>
+        <p class="detail-escrow-note">🔒 Dana ditahan di escrow sampai kamu konfirmasi kartu diterima.</p>
       </div>
       {% elif not current_user %}
       <div class="detail-actions">
-        <a href="/auth/login" class="btn btn-primary btn-lg btn-full"
-          >Masuk untuk Beli</a
-        >
+        <a href="/auth/login" class="btn btn-primary btn-lg btn-full">Masuk untuk Beli</a>
       </div>
       {% elif current_user.id == listing.seller_id %}
       <div class="detail-actions">
         <div class="own-listing-note">Ini listing kamu sendiri.</div>
         {% if listing.status == 'active' %}
-        <form
-          method="POST"
-          action="/listings/{{ listing.id }}/delete"
-          style="margin-top: 12px"
-          onsubmit="return confirm('Yakin mau hapus listing ini?');"
-        >
-          <button type="submit" class="btn btn-delete btn-full">
-            Hapus Listing
-          </button>
+        <form method="POST" action="/listings/{{ listing.id }}/delete" style="margin-top:12px;" onsubmit="return confirm('Yakin mau hapus listing ini?')">
+          <button type="submit" class="btn btn-delete btn-full">Hapus Listing</button>
         </form>
         {% endif %}
       </div>
@@ -148,12 +123,10 @@ GottaBuyEmAll{% endblock %} {% block content %}
 </div>
 
 <script>
-  function switchImage(src, el) {
-    document.getElementById("mainImg").src = src;
-    document
-      .querySelectorAll(".detail-thumb")
-      .forEach((t) => t.classList.remove("active"));
-    el.classList.add("active");
-  }
+function switchImage(src, el) {
+  document.getElementById('mainImg').src = src
+  document.querySelectorAll('.detail-thumb').forEach(t => t.classList.remove('active'))
+  el.classList.add('active')
+}
 </script>
 {% endblock %}

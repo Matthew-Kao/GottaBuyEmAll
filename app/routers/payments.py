@@ -1,6 +1,7 @@
 import hashlib
 import hmac
 import json
+import time
 from datetime import datetime
 from decimal import Decimal
 
@@ -21,16 +22,20 @@ from app.models.user import User
 router = APIRouter(prefix="/payments")
 templates = Jinja2Templates(directory="app/templates")
 
-XENDIT_BASE = "https://api.xendit.co"
+TRIPAY_BASE = "https://tripay.co.id/api-sandbox"
 
 
-def xendit_headers():
-    import base64
-    token = base64.b64encode(f"{settings.xendit_secret_key}:".encode()).decode()
+def tripay_headers():
     return {
-        "Authorization": f"Basic {token}",
+        "Authorization": f"Bearer {settings.tripay_api_key}",
         "Content-Type": "application/json",
     }
+
+
+def make_signature(merchant_ref: str, amount: int) -> str:
+    key = settings.tripay_private_key
+    msg = f"{settings.tripay_merchant_code}{merchant_ref}{amount}"
+    return hmac.new(key.encode(), msg.encode(), hashlib.sha256).hexdigest()
 
 
 @router.post("/checkout/{listing_id}")
@@ -59,7 +64,6 @@ async def checkout(
     if listing.seller_id == current_user.id:
         return RedirectResponse(f"/listings/{listing_id}", status_code=302)
 
-    # Create order in DB
     order = Order(
         buyer_id=current_user.id,
         listing_id=listing.id,
@@ -70,48 +74,56 @@ async def checkout(
     db.commit()
     db.refresh(order)
 
-    # Create Xendit invoice
     card_name = listing.card.card_name or listing.card.pokemon.name
-    invoice_data = {
-        "external_id": f"order-{order.id}",
-        "amount": float(listing.price),
-        "description": f"GottaBuyEmAll — {card_name} ({listing.card.set_name})",
-        "payer_email": current_user.email,
-        "customer": {
-            "given_names": current_user.username,
-            "email": current_user.email,
-        },
-        "success_redirect_url": str(request.base_url) + f"payments/success/{order.id}",
-        "failure_redirect_url": str(request.base_url) + f"payments/failed/{order.id}",
-        "currency": "IDR",
-        "items": [
+    merchant_ref = f"order-{order.id}"
+    amount = int(listing.price)
+    expired_time = int(time.time()) + (24 * 60 * 60)
+
+    payload = {
+        "method": "BRIVA",
+        "merchant_ref": merchant_ref,
+        "amount": amount,
+        "customer_name": current_user.username,
+        "customer_email": current_user.email,
+        "customer_phone": "08000000000",
+        "order_items": [
             {
+                "sku": f"CARD-{listing.card_id}",
                 "name": card_name,
+                "price": amount,
                 "quantity": 1,
-                "price": float(listing.price),
-                "category": "Pokemon Card",
             }
         ],
+        "return_url": str(request.base_url) + f"payments/success/{order.id}",
+        "expired_time": expired_time,
+        "signature": make_signature(merchant_ref, amount),
     }
 
     try:
         resp = requests.post(
-            f"{XENDIT_BASE}/v2/invoices",
-            headers=xendit_headers(),
-            json=invoice_data,
+            f"{TRIPAY_BASE}/transaction/create",
+            headers=tripay_headers(),
+            json=payload,
             timeout=10,
         )
-        resp.raise_for_status()
-        invoice = resp.json()
+        data = resp.json()
 
-        order.xendit_invoice_id = invoice["id"]
-        order.xendit_invoice_url = invoice["invoice_url"]
-        order.payment_ref = invoice["external_id"]
+        if not data.get("success"):
+            print(f"TRIPAY FAILED: {data}")
+            db.delete(order)
+            db.commit()
+            return RedirectResponse(f"/listings/{listing_id}", status_code=302)
+
+        result = data["data"]
+        order.tripay_reference = result["reference"]
+        order.tripay_payment_url = result["checkout_url"]
+        order.payment_ref = merchant_ref
         db.commit()
 
-        return RedirectResponse(invoice["invoice_url"], status_code=302)
+        return RedirectResponse(result["checkout_url"], status_code=302)
 
     except Exception as e:
+        print(f"TRIPAY ERROR: {e}")
         db.delete(order)
         db.commit()
         return RedirectResponse(f"/listings/{listing_id}", status_code=302)
@@ -158,21 +170,28 @@ async def payment_failed(
     return RedirectResponse("/", status_code=302)
 
 
-@router.post("/webhook/xendit")
-async def xendit_webhook(request: Request, db: Session = Depends(get_db)):
-    # Verify webhook token
-    token = request.headers.get("x-callback-token", "")
-    if token != settings.xendit_webhook_token:
-        raise HTTPException(status_code=403, detail="Invalid webhook token")
+@router.post("/webhook/tripay")
+async def tripay_webhook(request: Request, db: Session = Depends(get_db)):
+    raw_body = await request.body()
 
-    body = await request.json()
+    signature = request.headers.get("X-Callback-Signature", "")
+    expected = hmac.new(
+        settings.tripay_private_key.encode(),
+        raw_body,
+        hashlib.sha256,
+    ).hexdigest()
+
+    if signature != expected:
+        raise HTTPException(status_code=403, detail="Invalid signature")
+
+    body = json.loads(raw_body)
+    merchant_ref = body.get("merchant_ref", "")
     event = body.get("status")
-    external_id = body.get("external_id", "")
 
-    if not external_id.startswith("order-"):
+    if not merchant_ref.startswith("order-"):
         return JSONResponse({"status": "ignored"})
 
-    order_id = int(external_id.replace("order-", ""))
+    order_id = int(merchant_ref.replace("order-", ""))
     order = db.query(Order).filter(Order.id == order_id).first()
 
     if not order:

@@ -17,19 +17,16 @@ class Order(Base):
 
     total_price: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)
 
-    status: Mapped[str] = mapped_column(
-        String(20), nullable=False, default="pending"
-    )
+    status: Mapped[str] = mapped_column(String(20), nullable=False, default="pending")
 
     payment_ref: Mapped[str | None] = mapped_column(String(100), nullable=True)
-    xendit_invoice_id: Mapped[str | None] = mapped_column(String(200), nullable=True)
-    xendit_invoice_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    tripay_reference: Mapped[str | None] = mapped_column(String(200), nullable=True)
+    tripay_payment_url: Mapped[str | None] = mapped_column(String(500), nullable=True)
 
     tracking_number: Mapped[str | None] = mapped_column(String(100), nullable=True)
     shipping_courier: Mapped[str | None] = mapped_column(String(50), nullable=True)
 
     escrow_release_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
-
     paid_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     shipped_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     confirmed_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
@@ -53,7 +50,6 @@ class Dispute(Base):
     order_id: Mapped[int] = mapped_column(Integer, ForeignKey("orders.id"), nullable=False, unique=True)
 
     reason: Mapped[str] = mapped_column(Text, nullable=False)
-
     status: Mapped[str] = mapped_column(String(20), nullable=False, default="open")
 
     resolution: Mapped[str | None] = mapped_column(String(30), nullable=True)

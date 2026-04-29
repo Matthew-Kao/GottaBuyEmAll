@@ -11,8 +11,9 @@ class Settings(BaseSettings):
     cloudinary_cloud_name: str
     cloudinary_api_key: str
     cloudinary_api_secret: str
-    xendit_secret_key: str
-    xendit_webhook_token: str = ""
+    tripay_api_key: str
+    tripay_private_key: str
+    tripay_merchant_code: str
 
     class Config:
         env_file = ".env"

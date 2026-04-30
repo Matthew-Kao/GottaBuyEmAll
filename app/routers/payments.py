@@ -80,7 +80,7 @@ async def checkout(
     expired_time = int(time.time()) + (24 * 60 * 60)
 
     payload = {
-        "method": "BRIVA",
+        "method": "QRIS",
         "merchant_ref": merchant_ref,
         "amount": amount,
         "customer_name": current_user.username,
@@ -181,7 +181,7 @@ async def tripay_webhook(request: Request, db: Session = Depends(get_db)):
         hashlib.sha256,
     ).hexdigest()
 
-    if signature != expected:
+    if not hmac.compare_digest(signature, expected):
         raise HTTPException(status_code=403, detail="Invalid signature")
 
     body = json.loads(raw_body)
@@ -189,13 +189,13 @@ async def tripay_webhook(request: Request, db: Session = Depends(get_db)):
     event = body.get("status")
 
     if not merchant_ref.startswith("order-"):
-        return JSONResponse({"status": "ignored"})
+        return JSONResponse({"success": True, "message": "OK"})
 
     order_id = int(merchant_ref.replace("order-", ""))
     order = db.query(Order).filter(Order.id == order_id).first()
 
     if not order:
-        return JSONResponse({"status": "order not found"})
+        return JSONResponse({"success": True, "message": "OK"})
 
     if event == "PAID" and order.status == "pending":
         order.status = "paid"
@@ -203,7 +203,7 @@ async def tripay_webhook(request: Request, db: Session = Depends(get_db)):
         order.listing.status = "sold"
         db.commit()
 
-    return JSONResponse({"status": "ok"})
+    return JSONResponse({"success": True, "message": "OK"})
 
 
 @router.post("/confirm/{order_id}")

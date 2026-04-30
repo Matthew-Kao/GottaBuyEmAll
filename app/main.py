@@ -17,6 +17,7 @@ from app.core.cloudinary import upload_image
 from app.routers import auth as auth_router
 from app.routers import listings as listings_router
 from app.routers import payments as payments_router
+from app.routers import disputes as disputes_router
 from app.config import settings
 
 import app.models
@@ -30,6 +31,7 @@ templates = Jinja2Templates(directory="app/templates")
 app.include_router(auth_router.router)
 app.include_router(listings_router.router)
 app.include_router(payments_router.router)
+app.include_router(disputes_router.router)
 
 
 @app.on_event("startup")
@@ -163,6 +165,7 @@ async def profile(
         .options(
             joinedload(Order.listing).joinedload(Listing.card).joinedload(Card.pokemon),
             joinedload(Order.listing).joinedload(Listing.seller),
+            joinedload(Order.dispute),
         )
         .filter(Order.buyer_id == current_user.id)
         .order_by(desc(Order.created_at))
@@ -182,6 +185,7 @@ async def update_profile(
     request: Request,
     bio: str = Form(default=""),
     favorite_pokemon: str = Form(default=""),
+    whatsapp: str = Form(default=""),
     avatar: UploadFile = File(default=None),
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
@@ -191,6 +195,7 @@ async def update_profile(
 
     current_user.bio = bio.strip() or None
     current_user.favorite_pokemon = favorite_pokemon.strip() or None
+    current_user.whatsapp = whatsapp.strip() or None
 
     if avatar and avatar.filename:
         file_bytes = await avatar.read()

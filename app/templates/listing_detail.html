@@ -86,6 +86,11 @@
           <div>
             <div class="detail-seller-name">{{ listing.seller.username }}</div>
             <div class="detail-seller-rating">{{ "%.1f"|format(listing.seller.seller_rating) }} ★ · {{ listing.seller.total_sales }} terjual</div>
+            {% if listing.seller.whatsapp %}
+            <a href="https://wa.me/62{{ listing.seller.whatsapp|replace('0', '', 1) }}" target="_blank" class="btn btn-ghost btn-sm" style="margin-top:8px; display:inline-block;">
+              💬 Chat via WhatsApp
+            </a>
+            {% endif %}
           </div>
         </div>
       </div>

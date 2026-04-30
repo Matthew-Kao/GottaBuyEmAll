@@ -1,0 +1,77 @@
+{% extends "shell.html" %}
+
+{% block title %}Buka Dispute — GottaBuyEmAll{% endblock %}
+
+{% block content %}
+<div class="sell-wrap">
+  <div class="sell-header">
+    <a href="/profile" class="auth-back">✕</a>
+    <div>
+      <h1 class="sell-title">Buka Dispute</h1>
+      <p class="sell-sub">Ceritakan masalah yang kamu hadapi dengan pesanan ini.</p>
+    </div>
+  </div>
+
+  <div class="detail-grading-box" style="margin-bottom: 24px;">
+    <div class="grading-row">
+      <span class="grading-label">Kartu</span>
+      <span class="grading-value">{{ order.listing.card.card_name or order.listing.card.pokemon.name }}</span>
+    </div>
+    <div class="grading-row">
+      <span class="grading-label">Seller</span>
+      <span class="grading-value">{{ order.listing.seller.username }}</span>
+    </div>
+    {% if order.listing.seller.whatsapp %}
+    <div class="grading-row">
+      <span class="grading-label">Kontak Seller</span>
+      <span class="grading-value">
+        <a href="https://wa.me/62{{ order.listing.seller.whatsapp|replace('0', '', 1) }}" target="_blank" class="btn btn-ghost btn-sm">
+          💬 Chat via WhatsApp
+        </a>
+      </span>
+    </div>
+    {% endif %}
+    <div class="grading-row">
+      <span class="grading-label">Total bayar</span>
+      <span class="grading-value">Rp {{ "{:,.0f}".format(order.total_price) }}</span>
+    </div>
+    <div class="grading-row">
+      <span class="grading-label">Status order</span>
+      <span class="grading-value">
+        <span class="order-status-badge status-{{ order.status }}">{{ order.status.title() }}</span>
+      </span>
+    </div>
+  </div>
+
+  <form method="POST" action="/disputes/new/{{ order.id }}" class="sell-form">
+    <div class="sell-section">
+      <h2 class="sell-section-title">Alasan Dispute</h2>
+      <div class="sell-fields">
+        <div class="field-group field-group--full">
+          <label class="field-label">Jelaskan masalahmu</label>
+          <textarea
+            name="reason"
+            class="field-input field-textarea"
+            placeholder="Contoh: Kartu tidak sesuai deskripsi, kondisi rusak, kartu tidak datang, dll..."
+            rows="6"
+            required
+          ></textarea>
+        </div>
+      </div>
+
+      <div class="escrow-highlight" style="margin-top: 20px;">
+        <div class="escrow-highlight-icon">⚠️</div>
+        <div class="escrow-highlight-text">
+          <h3>Sebelum membuka dispute</h3>
+          <p>Pastikan kamu sudah menghubungi seller terlebih dahulu{% if order.listing.seller.whatsapp %} via WhatsApp di atas{% endif %}. Dispute akan mengunci dana escrow dan tim kami akan meninjau kasusmu dalam 1-3 hari kerja.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sell-submit">
+      <button type="submit" class="btn btn-primary btn-lg">Buka Dispute</button>
+      <a href="/profile" class="btn btn-ghost btn-lg">Batal</a>
+    </div>
+  </form>
+</div>
+{% endblock %}

@@ -172,11 +172,28 @@ async def profile(
         .all()
     )
 
+    # Orders where the current user is the seller — paid or shipped (active fulfillment)
+    orders_as_seller = (
+        db.query(Order)
+        .join(Order.listing)
+        .options(
+            joinedload(Order.listing).joinedload(Listing.card).joinedload(Card.pokemon),
+            joinedload(Order.buyer),
+        )
+        .filter(
+            Listing.seller_id == current_user.id,
+            Order.status.in_(["paid", "shipped", "disputed"]),
+        )
+        .order_by(asc(Order.created_at))
+        .all()
+    )
+
     return templates.TemplateResponse(request, "profile.html", {
         "current_user": current_user,
         "profile_user": current_user,
         "listings": listings,
         "orders_as_buyer": orders_as_buyer,
+        "orders_as_seller": orders_as_seller,
     })
 
 

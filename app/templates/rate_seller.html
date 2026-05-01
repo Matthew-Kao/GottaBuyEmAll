@@ -1,0 +1,83 @@
+{% extends "shell.html" %}
+
+{% block title %}Beri Rating — GottaBuyEmAll{% endblock %}
+
+{% block content %}
+<div class="sell-wrap">
+  <div class="sell-header">
+    <div>
+      <h1 class="sell-title">Beri Rating Seller</h1>
+      <p class="sell-sub">Pesananmu sudah dikonfirmasi. Bagaimana pengalamanmu?</p>
+    </div>
+  </div>
+
+  <div class="detail-grading-box" style="margin-bottom: 24px;">
+    <div class="grading-row">
+      <span class="grading-label">Kartu</span>
+      <span class="grading-value">{{ order.listing.card.card_name or order.listing.card.pokemon.name }}</span>
+    </div>
+    <div class="grading-row">
+      <span class="grading-label">Seller</span>
+      <span class="grading-value">{{ order.listing.seller.username }}</span>
+    </div>
+    <div class="grading-row">
+      <span class="grading-label">Total bayar</span>
+      <span class="grading-value">Rp {{ "{:,.0f}".format(order.total_price) }}</span>
+    </div>
+  </div>
+
+  <form method="POST" action="/payments/rate/{{ order.id }}" class="sell-form">
+    <div class="sell-section">
+      <h2 class="sell-section-title">Rating</h2>
+
+      <div class="star-rating-wrap">
+        {% for i in [5, 4, 3, 2, 1] %}
+        <input type="radio" name="rating" id="star{{ i }}" value="{{ i }}" {% if i == 5 %}checked{% endif %} />
+        <label for="star{{ i }}">★</label>
+        {% endfor %}
+      </div>
+
+      <div class="star-labels">
+        <span>1 — Sangat buruk</span>
+        <span>5 — Sangat bagus</span>
+      </div>
+    </div>
+
+    <div class="sell-submit">
+      <button type="submit" class="btn btn-primary btn-lg">Kirim Rating</button>
+      <a href="/profile" class="btn btn-ghost btn-lg">Lewati</a>
+    </div>
+  </form>
+</div>
+
+<style>
+.star-rating-wrap {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+  gap: 4px;
+  margin: 16px 0 8px;
+}
+.star-rating-wrap input[type="radio"] {
+  display: none;
+}
+.star-rating-wrap label {
+  font-size: 48px;
+  color: var(--border);
+  cursor: pointer;
+  transition: color 0.15s;
+}
+.star-rating-wrap input:checked ~ label,
+.star-rating-wrap label:hover,
+.star-rating-wrap label:hover ~ label {
+  color: #f5a623;
+}
+.star-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--text-muted);
+  max-width: 280px;
+}
+</style>
+{% endblock %}

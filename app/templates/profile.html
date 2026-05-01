@@ -108,6 +108,76 @@
   {% endif %}
 
   <div class="profile-body">
+
+    {% if orders_as_seller %}
+    <div class="profile-section">
+      <h2 class="profile-section-title">
+        Pesanan Masuk
+        {% set pending_count = orders_as_seller | selectattr('status', 'equalto', 'paid') | list | length %}
+        {% if pending_count > 0 %}
+        <span style="background:var(--accent);color:#fff;font-size:12px;padding:2px 8px;border-radius:99px;margin-left:8px;">{{ pending_count }} perlu dikirim</span>
+        {% endif %}
+      </h2>
+      <div class="orders-list">
+        {% for order in orders_as_seller %}
+        <div class="order-row">
+          <div class="order-img-wrap">
+            {% if order.listing.first_image %}
+            <img src="{{ order.listing.first_image }}" alt="{{ order.listing.card.pokemon.name }}" class="order-img" />
+            {% else %}
+            <div class="order-img-placeholder">?</div>
+            {% endif %}
+          </div>
+          <div class="order-info">
+            <div class="order-card-name">{{ order.listing.card.card_name or order.listing.card.pokemon.name }}</div>
+            <div class="order-card-set">{{ order.listing.card.set_name }}</div>
+            <div class="order-seller">pembeli: <strong>{{ order.buyer.username }}</strong></div>
+            {% if order.buyer.whatsapp %}
+            <a href="https://wa.me/62{{ order.buyer.whatsapp|replace('0', '', 1) }}" target="_blank" class="btn btn-ghost btn-sm" style="margin-top:6px;">
+              💬 Chat Pembeli
+            </a>
+            {% endif %}
+          </div>
+          <div class="order-right">
+            <div class="order-price">Rp {{ "{:,.0f}".format(order.total_price) }}</div>
+            <span class="order-status-badge status-{{ order.status }}">{{ order.status.title() }}</span>
+
+            {% if order.status == 'paid' %}
+            <div class="order-actions" style="margin-top:8px;">
+              <button class="btn btn-primary btn-sm" onclick="toggleShipForm({{ order.id }})">Tandai Dikirim</button>
+              <div id="shipForm-{{ order.id }}" style="display:none; margin-top:10px;">
+                <form method="POST" action="/payments/ship/{{ order.id }}">
+                  <div class="field-group" style="margin-bottom:8px;">
+                    <input type="text" name="shipping_courier" class="field-input" placeholder="Kurir (JNE, SICEPAT, dll)" required />
+                  </div>
+                  <div class="field-group" style="margin-bottom:8px;">
+                    <input type="text" name="tracking_number" class="field-input" placeholder="Nomor resi" required />
+                  </div>
+                  <button type="submit" class="btn btn-primary btn-sm">Konfirmasi Kirim</button>
+                  <button type="button" class="btn btn-ghost btn-sm" onclick="toggleShipForm({{ order.id }})">Batal</button>
+                </form>
+              </div>
+            </div>
+            {% endif %}
+
+            {% if order.status == 'shipped' and order.tracking_number %}
+            <div style="margin-top:8px; font-size:13px; color:var(--text-muted);">
+              {{ order.shipping_courier }} · {{ order.tracking_number }}
+            </div>
+            {% endif %}
+
+            {% if order.status == 'disputed' %}
+            <div style="margin-top:8px;">
+              <span class="order-status-badge status-disputed">Ada Dispute</span>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
     <div class="profile-section">
       <h2 class="profile-section-title">Kartu yang dijual</h2>
       {% if listings %}
@@ -174,6 +244,11 @@
               💬 Chat Seller
             </a>
             {% endif %}
+            {% if order.status == 'shipped' and order.tracking_number %}
+            <div style="margin-top:6px; font-size:13px; color:var(--text-muted);">
+              📦 {{ order.shipping_courier }} · {{ order.tracking_number }}
+            </div>
+            {% endif %}
           </div>
           <div class="order-right">
             <div class="order-price">Rp {{ "{:,.0f}".format(order.total_price) }}</div>
@@ -225,6 +300,11 @@ function previewAvatar(input) {
     if (initial) initial.style.display = 'none'
   }
   reader.readAsDataURL(file)
+}
+
+function toggleShipForm(orderId) {
+  const form = document.getElementById('shipForm-' + orderId)
+  form.style.display = form.style.display === 'none' ? 'block' : 'none'
 }
 </script>
 {% endblock %}

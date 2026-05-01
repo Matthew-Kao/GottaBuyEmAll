@@ -6,7 +6,7 @@ from datetime import datetime
 from decimal import Decimal
 
 import requests
-from fastapi import APIRouter, Request, Depends, HTTPException
+from fastapi import APIRouter, Request, Depends, HTTPException, Form
 from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
 from sqlalchemy.orm import Session, joinedload
@@ -206,6 +206,36 @@ async def tripay_webhook(request: Request, db: Session = Depends(get_db)):
     return JSONResponse({"success": True, "message": "OK"})
 
 
+@router.post("/ship/{order_id}")
+async def ship_order(
+    order_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+    shipping_courier: str = Form(...),
+    tracking_number: str = Form(...),
+):
+    if not current_user:
+        return RedirectResponse("/auth/login", status_code=302)
+
+    order = (
+        db.query(Order)
+        .options(joinedload(Order.listing))
+        .filter(Order.id == order_id, Order.status == "paid")
+        .first()
+    )
+
+    if not order or order.listing.seller_id != current_user.id:
+        return RedirectResponse("/profile", status_code=302)
+
+    order.status = "shipped"
+    order.shipping_courier = shipping_courier.strip()
+    order.tracking_number = tracking_number.strip()
+    order.shipped_at = datetime.utcnow()
+    db.commit()
+
+    return RedirectResponse("/profile", status_code=302)
+
+
 @router.post("/confirm/{order_id}")
 async def confirm_receipt(
     order_id: int,
@@ -226,6 +256,78 @@ async def confirm_receipt(
 
     order.status = "confirmed"
     order.confirmed_at = datetime.utcnow()
+    db.commit()
+
+    return RedirectResponse(f"/payments/rate/{order_id}", status_code=302)
+
+
+@router.get("/rate/{order_id}", response_class=HTMLResponse)
+async def rate_seller_page(
+    order_id: int,
+    request: Request,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    if not current_user:
+        return RedirectResponse("/auth/login", status_code=302)
+
+    order = (
+        db.query(Order)
+        .options(
+            joinedload(Order.listing).joinedload(Listing.card).joinedload(Card.pokemon),
+            joinedload(Order.listing).joinedload(Listing.seller),
+        )
+        .filter(
+            Order.id == order_id,
+            Order.buyer_id == current_user.id,
+            Order.status == "confirmed",
+        )
+        .first()
+    )
+
+    if not order:
+        return RedirectResponse("/profile", status_code=302)
+
+    return templates.TemplateResponse(request, "rate_seller.html", {
+        "current_user": current_user,
+        "order": order,
+    })
+
+
+@router.post("/rate/{order_id}")
+async def submit_rating(
+    order_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+    rating: int = Form(...),
+):
+    if not current_user:
+        return RedirectResponse("/auth/login", status_code=302)
+
+    order = (
+        db.query(Order)
+        .options(joinedload(Order.listing).joinedload(Listing.seller))
+        .filter(
+            Order.id == order_id,
+            Order.buyer_id == current_user.id,
+            Order.status == "confirmed",
+        )
+        .first()
+    )
+
+    if not order:
+        return RedirectResponse("/profile", status_code=302)
+
+    rating = max(1, min(5, rating))
+
+    seller = order.listing.seller
+    total = seller.seller_rating * seller.total_sales
+    seller.total_sales += 1
+    seller.seller_rating = round((total + rating) / seller.total_sales, 1)
+
+    order.status = "done"
+    order.completed_at = datetime.utcnow()
+
     db.commit()
 
     return RedirectResponse("/profile", status_code=302)

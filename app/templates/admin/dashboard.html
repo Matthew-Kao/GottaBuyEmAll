@@ -1,0 +1,170 @@
+{% extends "shell.html" %}
+
+{% block title %}Admin Panel — GottaBuyEmAll{% endblock %}
+
+{% block content %}
+<div class="sell-wrap" style="max-width: 1100px;">
+  <div class="sell-header">
+    <div>
+      <h1 class="sell-title">Admin Panel</h1>
+      <p class="sell-sub">Kelola dispute, order, dan pengguna.</p>
+    </div>
+    <a href="/" class="btn btn-ghost btn-sm">← Kembali</a>
+  </div>
+
+  <!-- DISPUTES -->
+  <div class="profile-section">
+    <h2 class="profile-section-title">
+      Dispute Aktif
+      {% if disputes %}
+      <span style="background:var(--accent);color:#fff;font-size:12px;padding:2px 8px;border-radius:99px;margin-left:8px;">{{ disputes|length }}</span>
+      {% endif %}
+    </h2>
+
+    {% if disputes %}
+    <div class="orders-list">
+      {% for dispute in disputes %}
+      <div class="order-row" style="flex-direction:column; align-items:flex-start; gap:12px;">
+        <div style="display:flex; gap:16px; width:100%;">
+          <div class="order-img-wrap">
+            {% if dispute.order.listing.first_image %}
+            <img src="{{ dispute.order.listing.first_image }}" class="order-img" />
+            {% else %}
+            <div class="order-img-placeholder">?</div>
+            {% endif %}
+          </div>
+          <div class="order-info" style="flex:1;">
+            <div class="order-card-name">{{ dispute.order.listing.card.card_name or dispute.order.listing.card.pokemon.name }}</div>
+            <div class="order-card-set">{{ dispute.order.listing.card.set_name }}</div>
+            <div style="margin-top:4px; font-size:13px; color:var(--text-muted);">
+              Buyer: <strong>{{ dispute.order.buyer.username }}</strong>
+              {% if dispute.order.buyer.whatsapp %}
+              · <a href="https://wa.me/62{{ dispute.order.buyer.whatsapp|replace('0', '', 1) }}" target="_blank">💬 WA Buyer</a>
+              {% endif %}
+            </div>
+            <div style="font-size:13px; color:var(--text-muted);">
+              Seller: <strong>{{ dispute.order.listing.seller.username }}</strong>
+              {% if dispute.order.listing.seller.whatsapp %}
+              · <a href="https://wa.me/62{{ dispute.order.listing.seller.whatsapp|replace('0', '', 1) }}" target="_blank">💬 WA Seller</a>
+              {% endif %}
+            </div>
+            <div style="font-size:13px; color:var(--text-muted);">
+              Total: <strong>Rp {{ "{:,.0f}".format(dispute.order.total_price) }}</strong>
+              · Order #{{ dispute.order.id }}
+              · Dibuka {{ dispute.created_at.strftime('%d %b %Y') }}
+            </div>
+          </div>
+          <div class="order-right">
+            <span class="order-status-badge status-{{ dispute.order.status }}">{{ dispute.order.status.title() }}</span>
+          </div>
+        </div>
+
+        <div style="background:var(--surface-raised); border-radius:8px; padding:12px; width:100%; box-sizing:border-box;">
+          <div style="font-size:13px; font-weight:600; margin-bottom:4px;">Alasan dispute:</div>
+          <p style="font-size:13px; color:var(--text-muted); margin:0;">{{ dispute.reason }}</p>
+        </div>
+
+        <form method="POST" action="/admin/disputes/{{ dispute.id }}/resolve" style="width:100%;">
+          <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
+            <div class="field-group" style="flex:1; min-width:200px; margin:0;">
+              <label class="field-label">Catatan resolusi</label>
+              <input type="text" name="resolution_notes" class="field-input" placeholder="Opsional — catat alasan keputusan" />
+            </div>
+            <button type="submit" name="resolution" value="refund_buyer" class="btn btn-delete btn-sm"
+              onclick="return confirm('Refund ke buyer? Order akan ditandai refunded.')">
+              Refund Buyer
+            </button>
+            <button type="submit" name="resolution" value="release_to_seller" class="btn btn-primary btn-sm"
+              onclick="return confirm('Release ke seller? Order akan ditandai done.')">
+              Release ke Seller
+            </button>
+          </div>
+        </form>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="profile-empty">
+      <div class="profile-empty-icon">✓</div>
+      <p class="profile-empty-title">Tidak ada dispute aktif</p>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- ALL ORDERS -->
+  <div class="profile-section">
+    <h2 class="profile-section-title">Semua Order <span style="font-size:13px;font-weight:400;color:var(--text-muted);">(50 terbaru)</span></h2>
+    <div class="orders-list">
+      {% for order in all_orders %}
+      <div class="order-row">
+        <div class="order-img-wrap">
+          {% if order.listing.first_image %}
+          <img src="{{ order.listing.first_image }}" class="order-img" />
+          {% else %}
+          <div class="order-img-placeholder">?</div>
+          {% endif %}
+        </div>
+        <div class="order-info">
+          <div class="order-card-name">{{ order.listing.card.card_name or order.listing.card.pokemon.name }}</div>
+          <div class="order-card-set">{{ order.listing.card.set_name }}</div>
+          <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">
+            Buyer: {{ order.buyer.username }} → Seller: {{ order.listing.seller.username }}
+          </div>
+          {% if order.tracking_number %}
+          <div style="font-size:12px; color:var(--text-muted);">
+            📦 {{ order.shipping_courier }} · {{ order.tracking_number }}
+          </div>
+          {% endif %}
+        </div>
+        <div class="order-right">
+          <div class="order-price">Rp {{ "{:,.0f}".format(order.total_price) }}</div>
+          <span class="order-status-badge status-{{ order.status }}">{{ order.status.title() }}</span>
+          <div style="font-size:11px; color:var(--text-muted); margin-top:4px;">
+            #{{ order.id }} · {{ order.created_at.strftime('%d %b %Y') }}
+          </div>
+          {% if order.dispute %}
+          <span class="order-status-badge status-disputed" style="margin-top:4px;">Dispute {{ order.dispute.status.title() }}</span>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- ALL USERS -->
+  <div class="profile-section">
+    <h2 class="profile-section-title">Semua Pengguna <span style="font-size:13px;font-weight:400;color:var(--text-muted);">({{ all_users|length }})</span></h2>
+    <div class="orders-list">
+      {% for user in all_users %}
+      <div class="order-row">
+        <div class="order-img-wrap">
+          <div class="order-img-placeholder" style="font-size:18px; font-weight:700;">
+            {% if user.avatar_url %}
+            <img src="{{ user.avatar_url }}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" />
+            {% else %}
+            {{ user.username[0].upper() }}
+            {% endif %}
+          </div>
+        </div>
+        <div class="order-info">
+          <div class="order-card-name">{{ user.username }}</div>
+          <div class="order-card-set">{{ user.email }}</div>
+          <div style="font-size:12px; color:var(--text-muted); margin-top:2px;">
+            Bergabung {{ user.created_at.strftime('%d %b %Y') }}
+            {% if user.whatsapp %} · WA: {{ user.whatsapp }}{% endif %}
+          </div>
+        </div>
+        <div class="order-right">
+          <div style="font-size:13px;">{{ user.total_sales }} terjual</div>
+          <div style="font-size:13px;">{{ "%.1f"|format(user.seller_rating) }} ★</div>
+          {% if user.is_admin %}
+          <span class="order-status-badge" style="background:var(--accent);color:#fff;margin-top:4px;">Admin</span>
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

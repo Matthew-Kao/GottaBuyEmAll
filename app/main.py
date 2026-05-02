@@ -18,6 +18,7 @@ from app.routers import auth as auth_router
 from app.routers import listings as listings_router
 from app.routers import payments as payments_router
 from app.routers import disputes as disputes_router
+from app.routers import admin as admin_router
 from app.config import settings
 
 import app.models
@@ -32,6 +33,7 @@ app.include_router(auth_router.router)
 app.include_router(listings_router.router)
 app.include_router(payments_router.router)
 app.include_router(disputes_router.router)
+app.include_router(admin_router.router)
 
 
 @app.on_event("startup")
@@ -172,7 +174,6 @@ async def profile(
         .all()
     )
 
-    # Orders where the current user is the seller — paid or shipped (active fulfillment)
     orders_as_seller = (
         db.query(Order)
         .join(Order.listing)

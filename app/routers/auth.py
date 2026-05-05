@@ -108,7 +108,7 @@ async def logout():
 
 @router.get("/google")
 async def google_login(request: Request):
-    redirect_uri = "https://gottabuyemall-production.up.railway.app/auth/google/callback" 
+    redirect_uri = "https://gottabuyemall.store/auth/google/callback" 
     return await oauth.google.authorize_redirect(request, redirect_uri)
 
 

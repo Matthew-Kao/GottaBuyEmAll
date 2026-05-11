@@ -242,3 +242,33 @@ async def faq(
     current_user: User = Depends(get_current_user),
 ):
     return RedirectResponse("/how-it-works", status_code=302)
+
+
+@app.get("/privacy", response_class=HTMLResponse)
+async def privacy(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+):
+    return templates.TemplateResponse(request, "privacy.html", {
+        "current_user": current_user,
+    })
+
+
+@app.get("/terms", response_class=HTMLResponse)
+async def terms(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+):
+    return templates.TemplateResponse(request, "terms.html", {
+        "current_user": current_user,
+    })
+
+
+@app.get("/contact", response_class=HTMLResponse)
+async def contact(
+    request: Request,
+    current_user: User = Depends(get_current_user),
+):
+    return templates.TemplateResponse(request, "contact.html", {
+        "current_user": current_user,
+    })

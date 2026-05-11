@@ -52,12 +52,7 @@
             <img
               src="{{ current_user.avatar_url }}"
               alt="{{ current_user.username }}"
-              style="
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                border-radius: 50%;
-              "
+              style="width:100%;height:100%;object-fit:cover;border-radius:50%;"
             />
             {% else %}{{ current_user.username[0].upper() }}{% endif %}
           </a>
@@ -75,9 +70,7 @@
       {% for category, message in messages %}
       <div class="flash flash-{{ category }}">
         {{ message }}
-        <button class="flash-close" onclick="this.parentElement.remove()">
-          ×
-        </button>
+        <button class="flash-close" onclick="this.parentElement.remove()">×</button>
       </div>
       {% endfor %}
     </div>
@@ -111,14 +104,17 @@
           <div class="footer-col">
             <span class="footer-col-title">Info</span>
             <a href="/how-it-works">Cara Kerja & FAQ</a>
+            <a href="/contact">Kontak & Support</a>
+          </div>
+          <div class="footer-col">
+            <span class="footer-col-title">Legal</span>
+            <a href="/privacy">Kebijakan Privasi</a>
+            <a href="/terms">Syarat & Ketentuan</a>
           </div>
         </div>
       </div>
       <div class="footer-bottom">
-        <span
-          >© 2025 GottaBuyEmAll. Dana pembeli diamankan hingga konfirmasi
-          penerimaan.</span
-        >
+        <span>© 2025 GottaBuyEmAll. Dana pembeli diamankan hingga konfirmasi penerimaan.</span>
       </div>
     </footer>
 

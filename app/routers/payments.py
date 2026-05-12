@@ -22,7 +22,7 @@ from app.models.user import User
 router = APIRouter(prefix="/payments")
 templates = Jinja2Templates(directory="app/templates")
 
-TRIPAY_BASE = "https://tripay.co.id/api-sandbox"
+TRIPAY_BASE = "https://tripay.co.id/api"
 
 
 def tripay_headers():

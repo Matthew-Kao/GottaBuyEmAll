@@ -67,17 +67,6 @@
   </div>
 
   {% if current_user and current_user.id == profile_user.id %}
-
-  {% if not profile_user.bank_account_number %}
-  <div class="escrow-highlight" style="margin: 16px 0;">
-    <div class="escrow-highlight-icon">⚠️</div>
-    <div class="escrow-highlight-text">
-      <h3>Rekening bank belum diisi</h3>
-      <p>Tambahkan rekening bank kamu agar kami bisa mentransfer hasil penjualan kartu. Klik "Edit Profil" di bawah untuk mengisi.</p>
-    </div>
-  </div>
-  {% endif %}
-
   <div class="profile-edit-form" id="editForm" style="display:none;">
     <h2 class="profile-section-title">Edit Profil</h2>
     <form method="POST" action="/profile/update" class="auth-form" enctype="multipart/form-data">

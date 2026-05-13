@@ -67,6 +67,17 @@
   </div>
 
   {% if current_user and current_user.id == profile_user.id %}
+
+  {% if not profile_user.bank_account_number %}
+  <div class="escrow-highlight" style="margin: 16px 0;">
+    <div class="escrow-highlight-icon">⚠️</div>
+    <div class="escrow-highlight-text">
+      <h3>Rekening bank belum diisi</h3>
+      <p>Tambahkan rekening bank kamu agar kami bisa mentransfer hasil penjualan kartu. Klik "Edit Profil" di bawah untuk mengisi.</p>
+    </div>
+  </div>
+  {% endif %}
+
   <div class="profile-edit-form" id="editForm" style="display:none;">
     <h2 class="profile-section-title">Edit Profil</h2>
     <form method="POST" action="/profile/update" class="auth-form" enctype="multipart/form-data">
@@ -100,6 +111,31 @@
         <label class="field-label">Nomor WhatsApp <span class="field-optional">opsional</span></label>
         <input type="text" name="whatsapp" class="field-input" placeholder="08123456789" value="{{ profile_user.whatsapp or '' }}" />
       </div>
+
+      <h3 class="profile-section-title" style="margin-top:24px;">Rekening Bank <span class="field-optional">untuk terima pembayaran</span></h3>
+      <div class="field-group">
+        <label class="field-label">Nama Bank</label>
+        <select name="bank_name" class="field-input">
+          <option value="">Pilih bank</option>
+          <option value="BCA" {% if profile_user.bank_name == 'BCA' %}selected{% endif %}>BCA</option>
+          <option value="BRI" {% if profile_user.bank_name == 'BRI' %}selected{% endif %}>BRI</option>
+          <option value="BNI" {% if profile_user.bank_name == 'BNI' %}selected{% endif %}>BNI</option>
+          <option value="Mandiri" {% if profile_user.bank_name == 'Mandiri' %}selected{% endif %}>Mandiri</option>
+          <option value="CIMB Niaga" {% if profile_user.bank_name == 'CIMB Niaga' %}selected{% endif %}>CIMB Niaga</option>
+          <option value="BSI" {% if profile_user.bank_name == 'BSI' %}selected{% endif %}>BSI</option>
+          <option value="Danamon" {% if profile_user.bank_name == 'Danamon' %}selected{% endif %}>Danamon</option>
+          <option value="Permata" {% if profile_user.bank_name == 'Permata' %}selected{% endif %}>Permata</option>
+        </select>
+      </div>
+      <div class="field-group">
+        <label class="field-label">Nomor Rekening</label>
+        <input type="text" name="bank_account_number" class="field-input" placeholder="1234567890" value="{{ profile_user.bank_account_number or '' }}" />
+      </div>
+      <div class="field-group">
+        <label class="field-label">Nama Pemilik Rekening</label>
+        <input type="text" name="bank_account_name" class="field-input" placeholder="Sesuai KTP" value="{{ profile_user.bank_account_name or '' }}" />
+      </div>
+
       <div class="profile-edit-actions">
         <button type="submit" class="btn btn-primary">Simpan</button>
         <button type="button" class="btn btn-ghost" onclick="toggleEditForm()">Batal</button>

@@ -12,6 +12,16 @@
     </div>
   </div>
 
+  {% if not has_bank %}
+  <div class="escrow-highlight" style="margin-bottom: 24px;">
+    <div class="escrow-highlight-icon">⚠️</div>
+    <div class="escrow-highlight-text">
+      <h3>Rekening bank belum diisi</h3>
+      <p>Kamu perlu mengisi rekening bank dulu sebelum bisa listing kartu. <a href="/profile" style="color:var(--accent); font-weight:600;">Isi sekarang di profil →</a></p>
+    </div>
+  </div>
+  {% endif %}
+
   <form method="POST" action="/sell" enctype="multipart/form-data" class="sell-form" id="sellForm">
 
     <div class="sell-section">
@@ -163,7 +173,7 @@
     </div>
 
     <div class="sell-submit">
-      <button type="submit" class="btn btn-primary btn-lg" id="submitBtn">Listing Sekarang</button>
+      <button type="submit" class="btn btn-primary btn-lg" id="submitBtn" {% if not has_bank %}disabled style="opacity:0.5;cursor:not-allowed;"{% endif %}>Listing Sekarang</button>
       <a href="/" class="btn btn-ghost btn-lg">Batal</a>
     </div>
 

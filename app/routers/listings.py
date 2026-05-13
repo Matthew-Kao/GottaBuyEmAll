@@ -24,6 +24,7 @@ async def sell_page(request: Request, current_user: User = Depends(get_current_u
         return RedirectResponse("/auth/login", status_code=302)
     return templates.TemplateResponse(request, "sell.html", {
         "current_user": current_user,
+        "has_bank": bool(current_user.bank_account_number),
     })
 
 
@@ -85,6 +86,9 @@ async def create_listing(
 ):
     if not current_user:
         return RedirectResponse("/auth/login", status_code=302)
+
+    if not current_user.bank_account_number:
+        return RedirectResponse("/profile", status_code=302)
 
     rarity_map = {
         "Common": "common",

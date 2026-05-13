@@ -328,6 +328,11 @@ function previewAvatar(input) {
   reader.readAsDataURL(file)
 }
 
+if (window.location.hash === '#editForm') {
+  document.getElementById('editForm').style.display = 'block'
+  document.getElementById('editForm').scrollIntoView({ behavior: 'smooth' })
+}
+
 function toggleShipForm(orderId) {
   const form = document.getElementById('shipForm-' + orderId)
   form.style.display = form.style.display === 'none' ? 'block' : 'none'

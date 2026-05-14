@@ -212,7 +212,7 @@
         <a href="/listings/{{ listing.id }}" class="card-item">
           <div class="card-img-wrap">
             {% if listing.first_image %}
-            <img src="{{ listing.first_image }}" alt="{{ listing.card.pokemon.name }}" class="card-img" loading="lazy" />
+            <img src="{{ listing.first_image }}" alt="{{ listing.card.card_name or listing.card.pokemon.name }}" class="card-img" loading="lazy" />
             {% else %}
             <div class="card-img-placeholder"><span>No Image</span></div>
             {% endif %}
@@ -222,7 +222,7 @@
             <span class="listing-status-badge status-{{ listing.status }}">{{ listing.status.title() }}</span>
           </div>
           <div class="card-info">
-            <div class="card-name">{{ listing.card.pokemon.name }}</div>
+            <div class="card-name">{{ listing.card.card_name or listing.card.pokemon.name }}</div>
             <div class="card-set">{{ listing.card.set_name }}</div>
             <div class="card-footer">
               <span class="card-price">Rp {{ "{:,.0f}".format(listing.price) }}</span>

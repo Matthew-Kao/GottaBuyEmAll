@@ -43,9 +43,9 @@
       <div class="card-stack">
         {% if hero_listings|length >= 3 %}
         <div class="stack-card stack-card--back">
-          <img src="{{ hero_listings[2].first_image }}" alt="{{ hero_listings[2].card.pokemon.name }}" class="stack-img" />
+          <img src="{{ hero_listings[2].first_image }}" alt="{{ hero_listings[2].card.card_name or hero_listings[2].card.pokemon.name }}" class="stack-img" />
           <div class="stack-card-overlay">
-            <div class="fake-card-name">{{ hero_listings[2].card.pokemon.name }}</div>
+            <div class="fake-card-name">{{ hero_listings[2].card.card_name or hero_listings[2].card.pokemon.name }}</div>
             <div class="fake-card-set">{{ hero_listings[2].card.rarity.replace('_', ' ').title() }} · {{ hero_listings[2].card.set_name }}</div>
             <div class="fake-card-price">Rp {{ "{:,.0f}".format(hero_listings[2].price) }}</div>
           </div>
@@ -54,9 +54,9 @@
 
         {% if hero_listings|length >= 2 %}
         <div class="stack-card stack-card--mid">
-          <img src="{{ hero_listings[1].first_image }}" alt="{{ hero_listings[1].card.pokemon.name }}" class="stack-img" />
+          <img src="{{ hero_listings[1].first_image }}" alt="{{ hero_listings[1].card.card_name or hero_listings[1].card.pokemon.name }}" class="stack-img" />
           <div class="stack-card-overlay">
-            <div class="fake-card-name">{{ hero_listings[1].card.pokemon.name }}</div>
+            <div class="fake-card-name">{{ hero_listings[1].card.card_name or hero_listings[1].card.pokemon.name }}</div>
             <div class="fake-card-set">{{ hero_listings[1].card.rarity.replace('_', ' ').title() }} · {{ hero_listings[1].card.set_name }}</div>
             <div class="fake-card-price">Rp {{ "{:,.0f}".format(hero_listings[1].price) }}</div>
           </div>
@@ -65,9 +65,9 @@
 
         {% if hero_listings|length >= 1 %}
         <div class="stack-card stack-card--front">
-          <img src="{{ hero_listings[0].first_image }}" alt="{{ hero_listings[0].card.pokemon.name }}" class="stack-img" />
+          <img src="{{ hero_listings[0].first_image }}" alt="{{ hero_listings[0].card.card_name or hero_listings[0].card.pokemon.name }}" class="stack-img" />
           <div class="stack-card-overlay">
-            <div class="fake-card-name">{{ hero_listings[0].card.pokemon.name }}</div>
+            <div class="fake-card-name">{{ hero_listings[0].card.card_name or hero_listings[0].card.pokemon.name }}</div>
             <div class="fake-card-set">{{ hero_listings[0].card.rarity.replace('_', ' ').title() }} · {{ hero_listings[0].card.set_name }}</div>
             <div class="fake-card-price">Rp {{ "{:,.0f}".format(hero_listings[0].price) }}</div>
           </div>
@@ -134,7 +134,7 @@
       <a href="/listings/{{ listing.id }}" class="card-item">
         <div class="card-img-wrap">
           {% if listing.first_image %}
-          <img src="{{ listing.first_image }}" alt="{{ listing.card.pokemon.name }}" class="card-img" loading="lazy" />
+          <img src="{{ listing.first_image }}" alt="{{ listing.card.card_name or listing.card.pokemon.name }}" class="card-img" loading="lazy" />
           {% else %}
           <div class="card-img-placeholder"><span>No Image</span></div>
           {% endif %}
@@ -148,7 +148,7 @@
           {% endif %}
         </div>
         <div class="card-info">
-          <div class="card-name">{{ listing.card.pokemon.name }}</div>
+          <div class="card-name">{{ listing.card.card_name or listing.card.pokemon.name }}</div>
           <div class="card-set">{{ listing.card.set_name }} · {{ listing.card.card_variant.replace('_', ' ').title() }}</div>
           <div class="card-footer">
             <span class="card-price">Rp {{ "{:,.0f}".format(listing.price) }}</span>
